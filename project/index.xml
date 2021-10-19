@@ -5,23 +5,43 @@
     <link>https://andgoldschmidt.github.io/project/</link>
       <atom:link href="https://andgoldschmidt.github.io/project/index.xml" rel="self" type="application/rss+xml" />
     <description>Projects</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Wed, 07 Oct 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://andgoldschmidt.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
+      <url>https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png</url>
       <title>Projects</title>
       <link>https://andgoldschmidt.github.io/project/</link>
     </image>
     
     <item>
-      <title>Example Project</title>
-      <link>https://andgoldschmidt.github.io/project/example/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/example/</guid>
-      <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere tellus ac convallis placerat. Proin tincidunt magna sed ex sollicitudin condimentum. Sed ac faucibus dolor, scelerisque sollicitudin nisi. Cras purus urna, suscipit quis sapien eu, pulvinar tempor diam. Quisque risus orci, mollis id ante sit amet, gravida egestas nisl. Sed ac tempus magna. Proin in dui enim. Donec condimentum, sem id dapibus fringilla, tellus enim condimentum arcu, nec volutpat est felis vel metus. Vestibulum sit amet erat at nulla eleifend gravida.&lt;/p&gt;
-&lt;p&gt;Nullam vel molestie justo. Curabitur vitae efficitur leo. In hac habitasse platea dictumst. Sed pulvinar mauris dui, eget varius purus congue ac. Nulla euismod, lorem vel elementum dapibus, nunc justo porta mi, sed tempus est est vel tellus. Nam et enim eleifend, laoreet sem sit amet, elementum sem. Morbi ut leo congue, maximus velit ut, finibus arcu. In et libero cursus, rutrum risus non, molestie leo. Nullam congue quam et volutpat malesuada. Sed risus tortor, pulvinar et dictum nec, sodales non mi. Phasellus lacinia commodo laoreet. Nam mollis, erat in feugiat consectetur, purus eros egestas tellus, in auctor urna odio at nibh. Mauris imperdiet nisi ac magna convallis, at rhoncus ligula cursus.&lt;/p&gt;
-&lt;p&gt;Cras aliquam rhoncus ipsum, in hendrerit nunc mattis vitae. Duis vitae efficitur metus, ac tempus leo. Cras nec fringilla lacus. Quisque sit amet risus at ipsum pharetra commodo. Sed aliquam mauris at consequat eleifend. Praesent porta, augue sed viverra bibendum, neque ante euismod ante, in vehicula justo lorem ac eros. Suspendisse augue libero, venenatis eget tincidunt ut, malesuada at lorem. Donec vitae bibendum arcu. Aenean maximus nulla non pretium iaculis. Quisque imperdiet, nulla in pulvinar aliquet, velit quam ultrices quam, sit amet fringilla leo sem vel nunc. Mauris in lacinia lacus.&lt;/p&gt;
-&lt;p&gt;Suspendisse a tincidunt lacus. Curabitur at urna sagittis, dictum ante sit amet, euismod magna. Sed rutrum massa id tortor commodo, vitae elementum turpis tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean purus turpis, venenatis a ullamcorper nec, tincidunt et massa. Integer posuere quam rutrum arcu vehicula imperdiet. Mauris ullamcorper quam vitae purus congue, quis euismod magna eleifend. Vestibulum semper vel augue eget tincidunt. Fusce eget justo sodales, dapibus odio eu, ultrices lorem. Duis condimentum lorem id eros commodo, in facilisis mauris scelerisque. Morbi sed auctor leo. Nullam volutpat a lacus quis pharetra. Nulla congue rutrum magna a ornare.&lt;/p&gt;
-&lt;p&gt;Aliquam in turpis accumsan, malesuada nibh ut, hendrerit justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque sed erat nec justo posuere suscipit. Donec ut efficitur arcu, in malesuada neque. Nunc dignissim nisl massa, id vulputate nunc pretium nec. Quisque eget urna in risus suscipit ultricies. Pellentesque odio odio, tincidunt in eleifend sed, posuere a diam. Nam gravida nisl convallis semper elementum. Morbi vitae felis faucibus, vulputate orci placerat, aliquet nisi. Aliquam erat volutpat. Maecenas sagittis pulvinar purus, sed porta quam laoreet at.&lt;/p&gt;
+      <title>Derivative</title>
+      <link>https://andgoldschmidt.github.io/project/derivative/</link>
+      <pubDate>Wed, 07 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/project/derivative/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Derivative&lt;/strong&gt; is an open-source project I started in 2019-2020 that turned into a collaboration with Markus Quade (Github, &lt;a href=&#34;https://github.com/Ohjeah&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@Ohjeah&lt;/a&gt;) and Brian de Silva (Github, &lt;a href=&#34;https://github.com/briandesilva&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@briandesilva&lt;/a&gt;). It is a standalone suite of numerical differentiation methods for noisy time series data written in Python.&lt;/p&gt;
+&lt;p&gt;The goal is to provide some common numerical differentiation techniques that showcase improvements that can be made on finite differences when data is noisy. The package binds these common differentiation methods to a single easily implemented differentiation interface to encourage user adaptation.&lt;/p&gt;
+&lt;p&gt;Derivative is a contribution to &lt;a href=&#34;https://github.com/dynamicslab/pysindy&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PySINDy&lt;/a&gt;, an open source Python package for the Sparse Identification of Nonlinear Dynamical systems (SINDy).&lt;/p&gt;
+&lt;p&gt;At some point, I&amp;rsquo;ll write a post about my version of total variational regularization (see the figure above). I adapted a technique from &lt;em&gt;The solution path of the generalized lasso&lt;/em&gt; (&lt;a href=&#34;https://projecteuclid.org/journals/annals-of-statistics/volume-39/issue-3/The-solution-path-of-the-generalized-lasso/10.1214/11-AOS878.full&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;DOI: 10.1214/11-AOS878&lt;/a&gt;) by R.J. Tibshirani &amp;amp; J. Taylor to write a nice variation of the classic algorithm in &lt;em&gt;Numerical Differentiation of Noisy, Nonsmooth Data&lt;/em&gt; (&lt;a href=&#34;https://doi.org/10.5402/2011/164564&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;DOI: 10.5402/2011/164564&lt;/a&gt;) by Rick Chartrand.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Hierarchical Clustering with Prototypes</title>
+      <link>https://andgoldschmidt.github.io/project/pyprotoclust/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/project/pyprotoclust/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Pyprotoclust&lt;/strong&gt; is an implementatin of representative hierarchical clustering using minimax linkage. The original algorithm is from &lt;em&gt;Hierarchical Clustering With Prototypes via Minimax Linkage&lt;/em&gt; (&lt;a href=&#34;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4527350/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;DOI: 10.1198/jasa.2011.tm10183&lt;/a&gt;) by J. Bien and R. Tibshirani; Pyprotoclust takes a distance matrix as input. It returns a linkage matrix encoding the hierachical clustering as well as an additional list labelling the prototypes associated with each clustering.&lt;/p&gt;
+&lt;p&gt;I coded up a fun example inspired by the original paper where I apply the algorithm to determine representative pictures for the Olivetti Faces dataset. It can be found &lt;a href=&#34;https://pyprotoclust.readthedocs.io/en/latest/notebooks/Example.html#Olivetti-Faces&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;in the Pyprotoclust documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Figure&lt;/strong&gt;: (Left) A dendrogram of the hierarchical clustering example with a dashed line at the example cut height. (Right) A scatter plot of the example with circles centered at prototypes drawn with radii equal to the top-level linkage heights of each cluster.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CartPole</title>
+      <link>https://andgoldschmidt.github.io/project/cartpole/</link>
+      <pubDate>Mon, 09 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/project/cartpole/</guid>
+      <description>&lt;p&gt;In this &lt;a href=&#34;https://github.com/andgoldschmidt/cartpole&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;project on Github&lt;/a&gt; I coded up some tutorial concepts in control theory like observability, controllability, and the linear quadratic regulator using the example environment of a linear pendulum fixed to a cart. I also made fun Jupyter notebook movies to visualize the results.&lt;/p&gt;
+&lt;p&gt;Also included under this project are the slides I did for a short class project covering reinforcement learning (RL) for CartPole from the OpenAI lab. It&amp;rsquo;s nice to contextualize model-free RL methods for control within a familiar environment where we have covered the control theory basics.&lt;/p&gt;
 </description>
     </item>
     
