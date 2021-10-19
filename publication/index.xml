@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Publications | Academic</title>
-    <link>https://example.com/publication/</link>
-      <atom:link href="https://example.com/publication/index.xml" rel="self" type="application/rss+xml" />
+    <title>Publications | Andy Goldschmidt</title>
+    <link>https://andgoldschmidt.github.io/publication/</link>
+      <atom:link href="https://andgoldschmidt.github.io/publication/index.xml" rel="self" type="application/rss+xml" />
     <description>Publications</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 01 Jul 2013 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Mon, 22 Mar 2021 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://example.com/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
+      <url>https://andgoldschmidt.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
       <title>Publications</title>
-      <link>https://example.com/publication/</link>
+      <link>https://andgoldschmidt.github.io/publication/</link>
     </image>
     
     <item>
-      <title>An example conference paper</title>
-      <link>https://example.com/publication/example/</link>
-      <pubDate>Mon, 01 Jul 2013 00:00:00 +0000</pubDate>
-      <guid>https://example.com/publication/example/</guid>
-      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+      <title>Bilinear dynamic mode decomposition for quantum control</title>
+      <link>https://andgoldschmidt.github.io/publication/bidmd/</link>
+      <pubDate>Mon, 22 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/publication/bidmd/</guid>
+      <description>&lt;!-- 
+&lt;div class=&#34;alert alert-note&#34;&gt;
   &lt;div&gt;
     Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
   &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class=&#34;alert alert-note&#34;&gt;
+ --&gt;
+&lt;!-- &lt;div class=&#34;alert alert-note&#34;&gt;
   &lt;div&gt;
     Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
   &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;Supplementary notes can be added here, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code, math, and images&lt;/a&gt;.&lt;/p&gt;
+ --&gt;
+&lt;p&gt;&lt;strong&gt;Caption for the figure:&lt;/strong&gt; The trajectory of a qubit driven by a linearly-polarized semi-classical drive $\textrm{u}(t)$ (Hamiltonian: $H(t) = \pi \sigma_z + \textrm{u}(t) \sigma_x$) is shown on the Bloch sphere in (a). The corresponding Pauli-spin measurements are shown in (b). Measurements $\mathbf{x}_j$, $j=1,2,\dots$, are taken at discrete time steps and assembled into offset snapshot matrices $\mathbf{X}$ and $\mathbf{X}&#39;$ in (c). The bilinear Dynamic Mode Decomposition (d) is a regression-based algorithm that uses the assembled data matrices and control input from sufficiently-resolved data to learn the intrinsic dynamics, $\mathbf{A}$ and the control, $\mathbf{B}$, for the bilinear dynamics.&lt;/p&gt;
+&lt;!-- Supplementary notes can be added here, including [code, math, and images](https://wowchemy.com/docs/writing-markdown-latex/). --&gt;
 </description>
     </item>
     
