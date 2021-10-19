@@ -19,7 +19,13 @@
       <guid>https://andgoldschmidt.github.io/project/derivative/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Derivative&lt;/strong&gt; is an open-source project I started in 2019-2020 that turned into a collaboration with Markus Quade (Github, &lt;a href=&#34;https://github.com/Ohjeah&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@Ohjeah&lt;/a&gt;) and Brian de Silva (Github, &lt;a href=&#34;https://github.com/briandesilva&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@briandesilva&lt;/a&gt;). It is a standalone suite of numerical differentiation methods for noisy time series data written in Python.&lt;/p&gt;
 &lt;p&gt;The goal is to provide some common numerical differentiation techniques that showcase improvements that can be made on finite differences when data is noisy. The package binds these common differentiation methods to a single easily implemented differentiation interface to encourage user adaptation.&lt;/p&gt;
-&lt;p&gt;Derivative is a contribution to &lt;a href=&#34;https://github.com/dynamicslab/pysindy&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PySINDy&lt;/a&gt;, an open source Python package for the Sparse Identification of Nonlinear Dynamical systems (SINDy).&lt;/p&gt;
+&lt;p&gt;Derivative is a contribution to &lt;a href=&#34;https://github.com/dynamicslab/pysindy/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PySINDy&lt;/a&gt;&lt;/p&gt;
+&lt;table&gt;&lt;tr&gt;
+&lt;td&gt; &lt;a href=&#34;https://zenodo.org/badge/latestdoi/186055899&#34;&gt;&lt;img src=&#34;https://zenodo.org/badge/186055899.svg&#34; style=&#34;width: 200px;&#34; alt=&#34;DOI&#34;&gt; &lt;/a&gt; &lt;/td&gt; 
+&lt;td&gt; &lt;a href=&#34;https://pysindy.readthedocs.io/en/latest/?badge=latest&#34;&gt;&lt;img src=&#34;https://readthedocs.org/projects/pysindy/badge/?version=latest&#34; style=&#34;width: 100px;&#34; alt=&#34;Documentation Status&#34;&gt; &lt;/a&gt; &lt;/td&gt; 
+&lt;td&gt; &lt;a href=&#34;https://github.com/dynamicslab/pysindy/stargazers&#34;&gt;&lt;img src=&#34;https://img.shields.io/github/stars/dynamicslab/pysindy.svg?style=social&amp;label=Star&amp;maxAge=2592000&#34; style=&#34;width: 100px;&#34; alt=&#34;GitHub stars&#34;&gt; &lt;/a&gt; &lt;/td&gt; 
+&lt;/tr&gt;&lt;/table&gt;
+&lt;p&gt;PySINDy is an open source Python package for the Sparse Identification of Nonlinear Dynamical systems (SINDy).&lt;/p&gt;
 &lt;p&gt;At some point, I&amp;rsquo;ll write a post about my version of total variational regularization (see the figure above). I adapted a technique from &lt;em&gt;The solution path of the generalized lasso&lt;/em&gt; (&lt;a href=&#34;https://projecteuclid.org/journals/annals-of-statistics/volume-39/issue-3/The-solution-path-of-the-generalized-lasso/10.1214/11-AOS878.full&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;DOI: 10.1214/11-AOS878&lt;/a&gt;) by R.J. Tibshirani &amp;amp; J. Taylor to write a nice variation of the classic algorithm in &lt;em&gt;Numerical Differentiation of Noisy, Nonsmooth Data&lt;/em&gt; (&lt;a href=&#34;https://doi.org/10.5402/2011/164564&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;DOI: 10.5402/2011/164564&lt;/a&gt;) by Rick Chartrand.&lt;/p&gt;
 </description>
     </item>
@@ -42,6 +48,7 @@
       <guid>https://andgoldschmidt.github.io/project/cartpole/</guid>
       <description>&lt;p&gt;In this &lt;a href=&#34;https://github.com/andgoldschmidt/cartpole&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;project on Github&lt;/a&gt; I coded up some tutorial concepts in control theory like observability, controllability, and the linear quadratic regulator using the example environment of a linear pendulum fixed to a cart. I also made fun Jupyter notebook movies to visualize the results.&lt;/p&gt;
 &lt;p&gt;Also included under this project are the slides I did for a short class project covering reinforcement learning (RL) for CartPole from the OpenAI lab. It&amp;rsquo;s nice to contextualize model-free RL methods for control within a familiar environment where we have covered the control theory basics.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;TODO: Turn this into a Google Colab&lt;/code&gt; &lt;a href=&#34;https://colab.research.google.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://colab.research.google.com/&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

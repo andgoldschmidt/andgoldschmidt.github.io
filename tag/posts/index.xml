@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts | Andy Goldschmidt</title>
+    <link>https://andgoldschmidt.github.io/tag/posts/</link>
+      <atom:link href="https://andgoldschmidt.github.io/tag/posts/index.xml" rel="self" type="application/rss+xml" />
+    <description>Posts</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Sat, 16 May 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png</url>
+      <title>Posts</title>
+      <link>https://andgoldschmidt.github.io/tag/posts/</link>
+    </image>
+    
+    <item>
+      <title>Python package development</title>
+      <link>https://andgoldschmidt.github.io/project/poetry/</link>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/project/poetry/</guid>
+      <description>&lt;p&gt;There are lots of features that go into packaging up Python code for other users. How can we make a project that ships easily to users and takes advantage of our normal development tools? We&amp;rsquo;ll discuss:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Poetry: for easily making and publishing a package&lt;/li&gt;
+&lt;li&gt;Sphinx: for making documentation&lt;/li&gt;
+&lt;li&gt;Readthedocs: free professional-looking documenation hosting and formatting&lt;/li&gt;
+&lt;li&gt;PyCharm: the default Python IDE (you can get the professional version as a student)&lt;/li&gt;
+&lt;li&gt;PyPI: Python pacakge index, where you store stuff that people can pip install.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;basics&#34;&gt;Basics&lt;/h2&gt;
+&lt;p&gt;Read the &lt;a href=&#34;https://python-poetry.org/docs/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Poetry docs&lt;/a&gt; to install. It&amp;rsquo;s good documentation; you should skim the Installation and Basic Usage first. For zsh users, make sure Poetry got added to your Path inside zshrc. For bash people, it&amp;rsquo;s automatic.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s make a new project with Poetry.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a python project. (See &lt;em&gt;Choosing a project name&lt;/em&gt; below this list.)
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;poetry new myproject
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Change to this directory.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;Start the poetry virtual environment.
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;poetry shell
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will make a virtual environment that is like a fresh Python installation for us to be explicit about our package&amp;rsquo;s dependencies.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;Install new pacakges as needed.
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;poetry add python_package
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The name python_pacakge would be something like numpy. Poetry will install the package to the virtual environment and add the package to the pyproject.toml file.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;Take a look at the pyproject.toml file. All your package settings are here. Any added pacakges appear automatically. We also have a file not for human consumption called poetry.lock which does all the work of building the exact environement we are using. It can be good to commit this poetry.lock to version control so someone interacting with our package knows the exact packages we were using.&lt;/li&gt;
+&lt;li&gt;To update all pacakges added with &lt;em&gt;poetry add&lt;/em&gt;, run &lt;em&gt;poetry update&lt;/em&gt;. To install the current system and update the poetry.lock file, run &lt;em&gt;poetry install&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;choosing-a-project-name&#34;&gt;Choosing a project name&lt;/h3&gt;
+&lt;p&gt;A new poetry project ``myproject&#39;&#39; has a specific directory structure:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    myproject
+    |-- pyproject.toml
+    |-- README.rst
+    |-- myproject
+    |   |-- __init__.py
+    |-- tests
+        |-- __init__.py
+        |-- test_myproject.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The project name is for the top level directory of the project. This is the name of the github repository and the PyPI project so it is invoked with &lt;code&gt;pip install myprojectname&lt;/code&gt;. It should be unique. Project names on PyPI should NOT use dashes (&lt;a href=&#34;https://stackoverflow.com/questions/8350853/%29&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://stackoverflow.com/questions/8350853/)&lt;/a&gt;. Underscores are allowed but discouraged. The package or module name is the inner directory containing __init__.py. This is the code that will be invoked by the user as &lt;em&gt;import my_project_name&lt;/em&gt; in code. It does not have to be unique. It can use underscores.Note that Poetry defaults to matching project and package names. This is also the Python style guideline (PEP 423).&lt;/p&gt;
+&lt;h3 id=&#34;version-control&#34;&gt;Version control&lt;/h3&gt;
+&lt;p&gt;Now we start tracking our new package on version control. Init a git repo in the project directory. Do this in your usual way. (e.g. hosting on github). The splash page for your package will be README.rst! Make it pretty.&lt;/p&gt;
+&lt;h3 id=&#34;pycharm&#34;&gt;PyCharm&lt;/h3&gt;
+&lt;p&gt;Let&amp;rsquo;s use a modern IDE. Open up the project in PyCharm.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Get the location of the interpreter for this virtual environment for PyCharm. Run this command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;poetry run which python
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Make the virtual environment default for PyCharm.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Settings $\rightarrow$ Project $\rightarrow$ Python Interpreter&lt;/li&gt;
+&lt;li&gt;Click the gear, and select add.&lt;/li&gt;
+&lt;li&gt;Choose the option \textit{existing environment} and add the path to the poetry virtual environment. Apply changes.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Now PyCharm will complain when you try to use python code you haven&amp;rsquo;t added. PyCharm will also give you actions to import missing libraries. However, be sure to add the python libraries with poetry, not PyCharm.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;add-documentation-with-sphinx&#34;&gt;Add documentation with Sphinx&lt;/h3&gt;
+&lt;p&gt;Let&amp;rsquo;s set up Sphinx.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Start&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir docs
+poetry add sphinx
+cd docs
+sphinx-quickstart
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The command line will prompt you with a few questions. Use the default settings, but enter any project-specific information as needed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;All Sphinx settings are in conf.py. The first setting to edit is the path. Uncomment the lines:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import os
+import sys
+sys.path.insert(0, os.path.abspath(&#39;.&#39;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and change the &amp;ldquo;.&amp;rdquo; to &amp;ldquo;..&amp;rdquo; to reflect the docs folder.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Make sure that Sphinx knows that the main file is index.rst by adding the lines&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Assign the master document
+master_doc = &#39;index&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;to conf.py.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Test to see that your docs compile. Run the command&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;make html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;inside the docs folder then open up index.html in your web browser.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add docs to readthedocs.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Go to &lt;a href=&#34;https://readthedocs.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;readthedocs&lt;/a&gt;, login, then find and click import.&lt;/li&gt;
+&lt;li&gt;Paste the link to the github repo and create.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Readthedocs will find the conf.py file and build the documentation.&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Check that github will let readthedocs know when the documentation is updated. Go to the project repo settings and confirm that the Webhooks tab includes readthedocs.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;em&gt;Note:
+Oddly, the default Poetry config section tool.poetry.dependencies that allows users of your package to avoid installing development tools like Sphinx is not supported by readthedocs (the listed packages won&amp;rsquo;t be used). There is an alternative, e.g.&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sphinx = {version=&amp;quot;^3.0.2&amp;quot;, optional = true}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;To add packages to Poetry as optional you can call poetry add sphinx &amp;ndash;optional to autofill this format.
+In your .readthedocs.yaml file, you can make sure these packages are installed by adding the extra_name parameter to extra_requirements, e.g.:&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;python:
+    version: 3.7
+    install:
+    - method: pip
+        path: .
+        extra_requirements:
+        - docs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;publish-the-package-on-pypi&#34;&gt;Publish the package on PyPI&lt;/h3&gt;
+&lt;p&gt;This is as easy as &lt;code&gt;poetry publish&lt;/code&gt;! First, we&amp;rsquo;ll have to setup our PyPI whic we can do by &lt;a href=&#34;https://python-poetry.org/docs/repositories/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;following the Poetry documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;additional-tasks&#34;&gt;Additional tasks&lt;/h2&gt;
+&lt;p&gt;Sphinx can automatically generate documentation for the modules, classes, and functions that have properly formatted docstrings. There are two main docstring styles: NumPy and Google. I use Google&amp;rsquo;s docstring format becaues it takes up less vertical space. The essential Sphinx extensions are autodoc (for automatically making docstrings into reStructuredText) and napoleon (for docstring formats). Both should be added to the Sphinx conf.py file as extensions,&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;extensions = [&#39;sphinx.ext.autodoc&#39;,&#39;sphinx.ext.napoleon&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;No installation by Poetry is necessary because both are part of the base installation of Sphinx.&lt;/p&gt;
+&lt;p&gt;A common point of troubleshooting is that the readthedocs servers do not have your desired library installed. You will need to go to Advanced Settings on readthedocs and make sure you select to use both&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-Markdown&#34;&gt;Install Project
+    Install your project inside a venv using setup.py install
+
+Use system packages
+    Give the venv access to the global site packages dir
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Technically, you may only need the second option to get e.g. numpy which readthedocs has installed on their servers for you. But if you want a more advanced option like sklearn that isn&amp;rsquo;t on the default servers, you&amp;rsquo;ll need to install the project. This means you need one more file at the top level of your project called .readthedocs.yaml which looks something like&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-TOML&#34;&gt;    version: 2
+
+    build:
+      image: latest
+    
+    python:
+      version: 3.7
+      install:
+        - method: pip
+          path: .
+          extra_requirements:
+            - docs
+    
+    sphinx:
+      configuration: docs/conf.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This file makes sure that the setup.py command (the old package tool) interacts with the poetry configuration files correctly. Currently, there are some changes to python standards moving in poetry&amp;rsquo;s direction, but these are not implemented in readthedocs yet. Hence, this extra file.&lt;/p&gt;
+&lt;h3 id=&#34;adding-jupyter-notebooks-to-the-docs&#34;&gt;Adding Jupyter notebooks to the docs&lt;/h3&gt;
+&lt;p&gt;The key tool here is nbsphinx. This will need to be installed by poetry. Also, an ipython kernel and a jupyter reader will need to be installed for readthedocs to run the notebook (explicitely, &lt;code&gt;poetry add ipykernel&lt;/code&gt; and &lt;code&gt;poetry add jupyter_client&lt;/code&gt;. You can make these optional. You will also need the .readthedocs.yaml file so see the note at the end of the autodoc section.&lt;/p&gt;
+&lt;h3 id=&#34;adding-a-license&#34;&gt;Adding a LICENSE&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a file in docs called license.rst and give the file a header like&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-Markdown&#34;&gt;License
+=======
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Inside the index.rst look for&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-Markdown&#34;&gt;.. toctree::
+    :maxdepth: 2
+    :caption: Contents:
+    license
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;where we have added license to link the license file to the main documentation page (the name of the link will reflect the headings/subheadings in the file license.rst).&lt;/p&gt;
+&lt;h2 id=&#34;cython-development&#34;&gt;Cython Development&lt;/h2&gt;
+&lt;p&gt;I think the most effective cython tutorial is &lt;a href=&#34;https://cython.readthedocs.io/en/latest/src/userguide/wrapping_CPlusPlus.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this cython documentation example&lt;/a&gt;. You&amp;rsquo;ll eventually be introduced to the very basic example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from setuptools import setup
+
+from Cython.Build import cythonize
+
+setup(ext_modules=cythonize(&amp;quot;rect.pyx&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This example is good because it shows the essential features. However, if you have multiple c++ files that you want to compile together, you will need more. Eventually you&amp;rsquo;ll want to create more complicated objects to pass to cythonize/ext_modules. This will &lt;a href=&#34;https://docs.python.org/3/extending/building.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;introduce you to distutils&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The main change to have cython code is to add a build.py file. This file uses the python library distutils to link all the c++ files and call cython. I have an &lt;a href=&#34;https://github.com/andgoldschmidt/pyprotoclust/blob/master/build.py&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example build.py on my Github&lt;/a&gt;. To get Poetry to use your build.py, you need to include &lt;code&gt;{build = &#39;build.py&#39;}&lt;/code&gt; under the &lt;code&gt;[tool.poetry]&lt;/code&gt; section in your pyproject.toml.&lt;/p&gt;
+&lt;p&gt;For readthedocs, it seems that a wrapper around this build.py script is needed. A short setup.py script can be written to do this. You might want to look at additional tasks for some context on parts of this, but here&amp;rsquo;s an example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Wrapper over build.py for readthedocs
+from distutils.core import setup
+from build import build
+
+global setup_kwargs
+
+setup_kwargs = {}
+
+build(setup_kwargs)
+setup(**setup_kwargs)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Another issue to address with readthedocs is making sure autodoc works for cython code. This fix is courtesy of &lt;a href=&#34;https://stackoverflow.com/questions/13238736&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://stackoverflow.com/questions/13238736&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;using-docker&#34;&gt;Using Docker&lt;/h2&gt;
+&lt;p&gt;The goal of this section is to build and distribute a C++ shared package called example_package inside a Python wheel using poetry and auditwheel. For this, I followed: &lt;a href=&#34;https://github.com/riddell-stan/poetry-install-shared-lib-demo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/riddell-stan/poetry-install-shared-lib-demo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The wheel created using these instructions conforms to the manylinux2014 standard and should be usable on most Linux systems. This README also includes notes which may be of interest to developers seeking to understand how the &lt;code&gt;auditwheel repair&lt;/code&gt; command works. You&amp;rsquo;ll need to install &lt;a href=&#34;https://docs.docker.com/get-docker/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;docker&lt;/a&gt; (so we can use PyPA&amp;rsquo;s &lt;code&gt;manylinux2014&lt;/code&gt; build image).&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
