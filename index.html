@@ -1037,7 +1037,7 @@
 
     <div class="article-style">
       <p>Andy is a Physics PhD student working on quantum optimal control as an NSF QISE-NET fellow in collaboration with Lawrence Livermore National Laboratory. He also worked with the Pacific Northwest Research Institute on the inverse design of better commerical brewing and baking yeasts. Andy enjoys highly-collaborative environments and likes to seek out out ways to turn new scientific discoveries into practical applications using data-driven methods. Andy is advised by <a href="https://faculty.washington.edu/kutz/" target="_blank" rel="noopener">J. Nathan Kutz</a>, Robert Bolles and Yasuko Endo Professor of Applied Math at the University of Washington.</p>
-<p>Even though he is attached to the Applied Math Department, Lawrence Livermore National Laboratory, and the Pacific Northwest Research Institute, Andy remains an active part of the University of Washington Department of Physics. He has organized two iteratons (2018, 2019) of a <a href="https://sites.google.com/view/cdophysics/home" target="_blank" rel="noopener">multi-day networking event</a> for the Physics Graduate School with invited industry sponsors, speakers, and alumni guests. Andy is also an officer of the Union Bay Rowing Club at the University of Washington and plays for Jet City F.C. in the Greater Seattle Soccer League. Andy is pictured to the left with his dog, Susie.</p>
+<p>Even though he is attached to the Applied Math Department, Lawrence Livermore National Laboratory, and the Pacific Northwest Research Institute, Andy remains an active part of the University of Washington Department of Physics. He has organized two iteratons (2018, 2019) of a <a href="https://sites.google.com/view/cdophysics/home" target="_blank" rel="noopener">multi-day networking event</a> for the Physics Graduate School with invited industry sponsors, speakers, and alumni guests. Andy is also an officer of the Union Bay Rowing Club at the University of Washington and plays for Jet City F.C. in the Greater Seattle Soccer League. Andy is pictured here with his dog, Susie.</p>
 <p>Andy is actively looking for quantum control and physics-informed machine learning Postdocs for Fall 2022!</p>
 <p>
   <i class="fas fa-download  pr-1 fa-fw"></i> Download my <a href="/uploads/andygold_cv.pdf" target="_blank">C.V.</a></p>
@@ -1557,6 +1557,125 @@
   <div class="media-body">
 
     <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/project/spectral_dmd/" >Spectral dynamic mode decomposition</a>
+    </div>
+
+    
+    <a href="/project/spectral_dmd/"  class="summary-link">
+      <div class="article-style">
+        Exploring a method for long time-series forecasting.
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+
+      
+    </div>
+
+    
+    <div class="btn-links">
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+    
+      
+    
+  
+  <a class="btn btn-outline-primary btn-page-header btn-sm" href="/notebooks/spectral_help.py" >
+    <i class="fab fa-python mr-1"></i>Source</a>
+
+
+    </div>
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+    
+    <a href="/project/spectral_dmd/" >
+      <img src="/project/spectral_dmd/featured_hub2fe9e4dda47c4ab69c418ef6eb324bc_110551_150x0_resize_lanczos_3.png" alt="Spectral dynamic mode decomposition" loading="lazy">
+    </a>
+    
+  </div>
+</div>
+
+</div>
+
+      
+
+    
+
+      
+      
+      
+
+      
+        
+
+
+<div class="col-12 isotope-item js-id-Machine-Learning">
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
       <a href="/project/derivative/" >Derivative</a>
     </div>
 
@@ -1693,7 +1812,7 @@
     
     <a href="/project/pyprotoclust/"  class="summary-link">
       <div class="article-style">
-        A Cython implementation of representative hierarchical clustering using minimax linkage.
+        An open-source Cython implementation of representative hierarchical clustering using minimax linkage.
       </div>
     </a>
     
@@ -2617,129 +2736,66 @@
 
 <div class="col-12 col-lg-8">
   <html>
+<style>
+.contact-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.2em 1em;
+}
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    border: solid
+    padding: 0.4em 0.6em 0.5em;
+    color: inherit;
+    background-color: inherit;
+    font-color: inherit;
+    font-family: inherit;
+    font-size: 0.95em;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: 1px solid #3eb0ef;
+    outline-offset: -1px;
+}
+.contact-form label[for="full-name"],
+.contact-form label[for="email-address"] {
+    order: -1;
+}
+.contact-form input {
+    order: 0;
+    margin-bottom: 0.6em;
+}
+.contact-form label[for="message"],
+.contact-form textarea {
+    grid-column-end: span 2;
+}
+.contact-form input[type="submit"] {
+    grid-column-start: 2;
+    justify-self: end;
+    margin-top: 0.6em;
+    background: #3eb0ef;
+    color: white;
+    width: auto;
+}
+</style>
 <head>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
-<body>
-  <form id="fs-frm" name="simple-contact-form" accept-charset="utf-8" action="https://formspree.io/f/mjvjdwng" method="post">
-    <fieldset id="fs-frm-inputs">
-      <label for="full-name">Full Name</label>
-      <input type="text" name="name" id="full-name" placeholder="First and Last" required="">
-      <label for="email-address">Email Address</label>
-      <input type="email" name="_replyto" id="email-address" placeholder="email@address.web" required="">
-      <label for="message">Message</label>
-      <textarea rows="5" name="message" id="message" placeholder="" required=""></textarea>
-      <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission">
-    </fieldset>
-    <div class="g-recaptcha" data-sitekey="6Ld2Dt8cAAAAAM2GyZVzrootrqQknuz52c2uIaWC"></div>
-    <input type="submit" value="Submit">
-  </form><style>/* reset */
-  #fs-frm input,
-  #fs-frm select,
-  #fs-frm textarea,
-  #fs-frm fieldset,
-  #fs-frm optgroup,
-  #fs-frm label,
-  #fs-frm #card-element:disabled {
-    font-family: inherit;
-    font-size: 100%;
-    color: inherit;
-    border: none;
-    border-radius: 0;
-    display: block;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-  }
-  #fs-frm label,
-  #fs-frm legend,
-  #fs-frm ::placeholder {
-    font-size: .825rem;
-    margin-bottom: .5rem;
-    padding-top: .2rem;
-    display: flex;
-    align-items: baseline;
-  }
-<p>/* border, padding, margin, width */
-#fs-frm input,
-#fs-frm select,
-#fs-frm textarea,
-#fs-frm #card-element {
-border: 1px solid rgba(0,0,0,0.2);
-background-color: rgba(255,255,255,0.9);
-padding: .75em 1rem;
-margin-bottom: 1.5rem;
-}
-#fs-frm input:focus,
-#fs-frm select:focus,
-#fs-frm textarea:focus {
-background-color: white;
-outline-style: solid;
-outline-width: thin;
-outline-color: gray;
-outline-offset: -1px;
-}
-#fs-frm [type=&ldquo;text&rdquo;],
-#fs-frm [type=&ldquo;email&rdquo;] {
-width: 100%;
-}
-#fs-frm [type=&ldquo;button&rdquo;],
-#fs-frm [type=&ldquo;submit&rdquo;],
-#fs-frm [type=&ldquo;reset&rdquo;] {
-width: auto;
-cursor: pointer;
--webkit-appearance: button;
--moz-appearance: button;
-appearance: button;
-}
-#fs-frm [type=&ldquo;button&rdquo;]:focus,
-#fs-frm [type=&ldquo;submit&rdquo;]:focus,
-#fs-frm [type=&ldquo;reset&rdquo;]:focus {
-outline: none;
-}
-#fs-frm [type=&ldquo;submit&rdquo;],
-#fs-frm [type=&ldquo;reset&rdquo;] {
-margin-bottom: 0;
-}
-#fs-frm select {
-text-transform: none;
-}</p>
-<p>#fs-frm [type=&ldquo;checkbox&rdquo;] {
--webkit-appearance: checkbox;
--moz-appearance: checkbox;
-appearance: checkbox;
-display: inline-block;
-width: auto;
-margin: 0 .5em 0 0 !important;
-}</p>
-<p>#fs-frm [type=&ldquo;radio&rdquo;] {
--webkit-appearance: radio;
--moz-appearance: radio;
-appearance: radio;
-}</p>
-<p>/* address, locale */
-#fs-frm fieldset.locale input[name=&ldquo;city&rdquo;],
-#fs-frm fieldset.locale select[name=&ldquo;state&rdquo;],
-#fs-frm fieldset.locale input[name=&ldquo;postal-code&rdquo;] {
-display: inline;
-}
-#fs-frm fieldset.locale input[name=&ldquo;city&rdquo;] {
-width: 52%;
-}
-#fs-frm fieldset.locale select[name=&ldquo;state&rdquo;],
-#fs-frm fieldset.locale input[name=&ldquo;postal-code&rdquo;] {
-width: 20%;
-}
-#fs-frm fieldset.locale input[name=&ldquo;city&rdquo;],
-#fs-frm fieldset.locale select[name=&ldquo;state&rdquo;] {
-margin-right: 3%;
-}
-</style></p>
-</body>
+<section class="post-full-content">
+    <form class="contact-form" action="https://formspree.io/f/mjvjdwng"  method="post">
+        <label for="full-name">Name</label>
+        <input type="text" name="name" id="full-name" placeholder="First and Last" required>
+        <label for="email-address">Email Address</label>
+        <input type="email" name="_replyto" id="email-address" placeholder="Your email address" required>
+        <label for="message">Message</label>
+        <textarea rows="5" name="message" id="message" placeholder="Your message" required></textarea>
+        <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission">
+        <div class="g-recaptcha" data-sitekey="6Ld2Dt8cAAAAAM2GyZVzrootrqQknuz52c2uIaWC"></div>
+        <input type="submit" value="Submit">
+    </form>
+</section>
 </html>
-
 
   
 

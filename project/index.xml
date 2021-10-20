@@ -5,12 +5,321 @@
     <link>https://andgoldschmidt.github.io/project/</link>
       <atom:link href="https://andgoldschmidt.github.io/project/index.xml" rel="self" type="application/rss+xml" />
     <description>Projects</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Wed, 07 Oct 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Mon, 04 Jan 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png</url>
       <title>Projects</title>
       <link>https://andgoldschmidt.github.io/project/</link>
     </image>
+    
+    <item>
+      <title>Spectral dynamic mode decomposition</title>
+      <link>https://andgoldschmidt.github.io/project/spectral_dmd/</link>
+      <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/project/spectral_dmd/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Spectral dynamic mode decomposition&lt;/strong&gt; is my term for Algorithm 1 from the paper &lt;em&gt;From Fourier to Koopman: Spectral Methods for Long-term Time Series Prediction&lt;/em&gt; by H. Lange, S.L. Brunton, J.N. Kutz (&lt;a href=&#34;https://www.youtube.com/watch?v=RBYFsFr4soo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;video&lt;/a&gt;) (&lt;a href=&#34;https://arxiv.org/abs/2004.00574&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;arXiv&lt;/a&gt;). Necessary background is a familiarity with the dynamic mode decomposition (&lt;a href=&#34;https://www.youtube.com/watch?v=sQvrK8AGCAo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;video&lt;/a&gt;) (&lt;a href=&#34;https://en.wikipedia.org/wiki/Dynamic_mode_decomposition&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Wikipedia entry&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;This project walks through a toy example I coded up in Python. The example is similar to one from the paper which gets across the main points. I have packed away the main functions for the algorithm in the utility &lt;code&gt;spectral_help.py&lt;/code&gt; which has been linked in this project&amp;rsquo;s description.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
+from numpy.linalg import norm, solve
+
+import matplotlib.pyplot as plt
+cmap = plt.get_cmap(&#39;tab20&#39;)
+
+from spectral_help import *
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;example-definition&#34;&gt;Example Definition&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;class toy_data:
+    &amp;quot;&amp;quot;&amp;quot; 
+    Generate toy oscillation data at specific frequencies.
+    &amp;quot;&amp;quot;&amp;quot;
+    def __init__(self, tf, npts, noise):
+        &amp;quot;&amp;quot;&amp;quot;
+        Parameters:
+            tf: final time
+            npts: number of samples between 0 and tf
+            noise: standard deviation of additive Gaussian noise
+        &amp;quot;&amp;quot;&amp;quot;
+        self.tf = tf
+        self.npts = npts
+        self.ts = np.linspace(0, self.tf, self.npts)
+        self.dt = self.ts[1] - self.ts[0]
+        self.noise = noise
+        
+        # Manual toy data (a stack of sines)
+        self.freqs = [0.5, 2, 0.75, 3]
+        self.X_fn = lambda ts: np.vstack([(np.sin([2 * np.pi * self.freqs[0] * ts]) + np.sin([2 * np.pi * self.freqs[1] * ts])),
+                                          (np.sin([2 * np.pi * self.freqs[2] * ts]) + np.sin([2 * np.pi * self.freqs[3] * ts]))])
+        
+        # Normalize, add noise
+        X = self.X_fn(self.ts)
+        self.X_mean = np.mean(X, axis=1).reshape(-1,1)
+        self.X_std = np.std(X, axis=1).reshape(-1,1)
+        X = (X - self.X_mean)/self.X_std
+        self.X_true = np.copy(X)
+        self.X = X + np.random.randn(*X.shape)*self.noise
+        
+        # Construct test vars
+        self.ts_test = None
+        self.X_test = None
+        
+        
+    def run_test(self, tf_predict, npts_predict):
+        &amp;quot;&amp;quot;&amp;quot;
+        Parameters:
+            tf_predict: final time
+            npts_predict: number of points between 0 and tf_predict
+            
+        Updates:
+            self.ts_test: test time series
+            self.X_test_true: normalized ground truth for the test
+        &amp;quot;&amp;quot;&amp;quot;
+        self.ts_test = np.linspace(0, tf_predict, npts_predict)
+        X_test = self.X_fn(self.ts_test)
+        
+        # Use training std_dev and mean
+        self.X_test_true = (X_test - self.X_mean)/self.X_std 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;run-the-experiment&#34;&gt;Run the Experiment&lt;/h1&gt;
+&lt;p&gt;We run the spectral dynamic mode decomposition algorithm to learn the frequencies of an operator generating our toy time-series data. Because of the nature of the algorithm, we can do this with very noisy data (Here, we set the standard deviation at 0.5 for mean-zero variance-one toy training data).&lt;/p&gt;
+&lt;p&gt;First, we configure the model. Then we set up the algorithm and run the optimization. The optimization is performed using the Accelerated Proximal Gradient Descent Method, or AGPD. The reason is because we are imposing sparsity using a $\ell_1$ norm&amp;ndash;that is, a LASSO-type optimization.&lt;/p&gt;
+&lt;h2 id=&#34;1-configure-the-model&#34;&gt;1. Configure the model&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Config
+# ======
+np.random.seed(1)
+
+# Data params
+npts = 400             # number of time points
+tf = 8                 # max time
+std_noise = .5         # set the amount of noise on the mean-0, variance-1 data
+predict_factor = 3     # prediction goes out to factor*T
+exper = toy_data(tf, npts, std_noise)
+
+# Algorithm params
+freq_dim = 24          # freq. for algo to try
+learning_rate = 1e-3   # LR = 1/beta from beta-smooth obj. bound (at least ideally--I&#39;m just choosing a number here)
+reg_factor = 5         # regularization on sparsity
+
+# SVD parameters 
+threshold_type = &#39;percent&#39; # choose &#39;count&#39; for number or &#39;percent&#39; for s/max(s) &amp;gt; threshold
+threshold = 1e-1
+
+# Plot toggle
+print_omega_updates = True
+def print_update(omg, title):
+    if print_omega_updates:
+        print(&#39;{} $\omega$:\t&#39;.format(title), np.sort(np.round(omg[omg.astype(bool)], 3)))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;2-set-up-the-algorithm--3-optimize&#34;&gt;2. Set up the algorithm &amp;amp; 3. Optimize&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Algorithm
+# =========
+# 1. Initialize
+omega = np.zeros(freq_dim)*2
+print_update(omega, &#39;Initial&#39;)
+A = np.random.rand(exper.X.shape[0], freq_dim*2)
+
+obj_his = []
+err_his = []
+
+# 2. FFT to obtain the initial starting point for the optimization
+for ifreq in range(len(omega)):
+    # - Construct the residual via the current frequencies
+    res = residual_j(ifreq, exper.X, A, omega, exper.ts)
+
+    # - Select the maximum fft frequency as the initial value
+    omega[ifreq] = max_fft_update(res, exper.dt)
+
+    # - Update A
+    A = update_A(exper.X, omega, exper.ts, threshold, threshold_type)
+
+# 3. Perform proximal gradient descent from the initial point
+# - Construct optimization functions
+lam_cs = reg_factor*norm(A.T.dot(exper.X), np.inf)
+def f(w):
+    return loss(exper.X, A, w.flatten(), exper.ts)
+def gradf(w):  
+    return grad_loss(exper.X, A, w.flatten(), exper.ts)
+def func_g(w):
+    return lam_cs*np.linalg.norm(w, ord=1)
+def prox_g(w, t):
+    res = []
+    r = t*lam_cs
+    for wi in w.flatten():
+        if wi &amp;gt; r:
+            res.append(wi-r)
+        elif wi &amp;lt; -r:
+            res.append(wi+r)
+        else:
+            res.append(0)
+    return np.array(res)
+
+# - Optimization algorithm
+w, iobj_his, ierr_his, cond = optimizeWithAPGD(omega.reshape(1,-1), f, func_g, gradf, prox_g, (1/learning_rate)*npts, max_iter=5000, verbose=True)
+obj_his.append(iobj_his)
+err_his.append(ierr_his)
+omega = w
+print_update(omega, &#39;Final  &#39;)
+
+# 4. Final operator update
+A = update_A(exper.X, omega, exper.ts, threshold, threshold_type)
+print_update(np.array(exper.freqs), &#39;Expected&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Initial $\omega$:	 []
+Final   $\omega$:	 [0.494 0.743 1.991 2.99 ]
+Expected $\omega$:	 [0.5  0.75 2.   3.  ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We printed out the frequencies (previous cell). In the next cell, we show the objective value and the gradient of the objective for the iterations of the optimization. The characteristic oscillations of an accelerated gradient descent are observed.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Plot 
+# ====
+# Inspect convergence results
+fig,axes = plt.subplots(2,1,figsize=[10,10])
+ax = axes[0]
+ax.plot(iobj_his)
+ax.set_ylabel(&#39;Obj. value&#39;)
+ax.set_xlabel(&#39;Iterations&#39;)
+ax.set_yscale(&#39;log&#39;)
+ax = axes[1]
+ax.plot(ierr_his)
+ax.set_ylabel(&#39;Gradient magn.&#39;)
+ax.set_xlabel(&#39;Iterations&#39;)
+ax.set_yscale(&#39;log&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png 400w,
+               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_fa9ef638480d69f3b09d71ebdc3dc0df.png 760w,
+               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png&#34;
+               width=&#34;635&#34;
+               height=&#34;601&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;result&#34;&gt;Result&lt;/h1&gt;
+&lt;p&gt;We see the training (top) and test (bottom) results for our two-dimensional multi-frequency dynamics.&lt;/p&gt;
+&lt;p&gt;Notice the order of magnitude increase in the horizontal time axis on the bottom plot. On this plot, we observe that the solutions match the test simulations and are stable because of the model assumptions.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Make prediction
+exper.run_test(tf*predict_factor, 10*npts) # keep sample freq the same
+
+bigOmg_test = BigOmg(omega, exper.ts_test)
+X_pred = A@(bigOmg_test)
+
+
+# Plot data
+fig,axes = plt.subplots(1,2,figsize=[20,3])
+fig.subplots_adjust(hspace=0.3, wspace=0.2)
+leg_params = {&#39;loc&#39;: &#39;upper right&#39;, &#39;shadow&#39;: True, &#39;fancybox&#39;: True}
+
+ax = axes[0]
+ax.plot(exper.ts, exper.X_true[0], color=cmap(1), label=&#39;Simulation&#39;)
+ax.plot(exper.ts, exper.X[0], ls=&#39;&#39;, marker=&#39;+&#39;, color=cmap(0), label=&#39;Training Data&#39;)
+ax.set_xlabel(&#39;t&#39;)
+ax.set_ylabel(&#39;x&#39;)
+ax.legend(**leg_params)
+ax = axes[1]
+ax.plot(exper.ts, exper.X_true[1], color=cmap(3), label=&#39;Simulation&#39;)
+ax.plot(exper.ts, exper.X[1], ls=&#39;&#39;, marker=&#39;+&#39;, color=cmap(2), label=&#39;Training Data&#39;)
+ax.legend(**leg_params)
+ax.set_xlabel(&#39;t&#39;)
+ax.set_ylabel(&#39;y&#39;)
+ax.set_ylim([-3.5,3.5])
+
+# Plot model
+fig,axes = plt.subplots(2,1,figsize=[20,5])
+fig.subplots_adjust(hspace=0.3, wspace=0.2)
+leg_params = {&#39;loc&#39;: &#39;upper right&#39;, &#39;shadow&#39;: True, &#39;fancybox&#39;: True}
+
+ax = axes[0]
+ax.plot(exper.ts_test, exper.X_test_true[0], color=cmap(1), label=&#39;Test Simulation&#39;)
+ax.plot(exper.ts_test, X_pred[0], ls=&#39;-&#39;, color=cmap(0), label=&#39;Model Prediction&#39;)
+ax.legend(**leg_params)
+ax.set_xlabel(&#39;t&#39;)
+ax.set_ylabel(&#39;x&#39;)
+ax = axes[1]
+ax.plot(exper.ts_test, exper.X_test_true[1], color=cmap(3), label=&#39;Test Simulation&#39;)
+ax.plot(exper.ts_test, X_pred[1], ls=&#39;-&#39;, color=cmap(2), label=&#39;Model Prediction&#39;)
+ax.legend(**leg_params)
+ax.set_xlabel(&#39;t&#39;)
+ax.set_ylabel(&#39;y&#39;)
+ax.set_ylim([-3.5,3.5])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;(Click on the figures to zoom.)&lt;/p&gt;
+&lt;p&gt;Training data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png 400w,
+               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_40f177da89af1e202d5e880b3bcb392e.png 760w,
+               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png&#34;
+               width=&#34;760&#34;
+               height=&#34;142&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;Test data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png 400w,
+               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_bec5f35f2817b20d7d9e4c24bafd0ffa.png 760w,
+               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png&#34;
+               width=&#34;760&#34;
+               height=&#34;212&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Derivative</title>
