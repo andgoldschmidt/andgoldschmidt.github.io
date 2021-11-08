@@ -322,7 +322,7 @@ ax.set_ylim([-3.5,3.5])
     </item>
     
     <item>
-      <title>Derivative</title>
+      <title>Better numerical derivatives for data</title>
       <link>https://andgoldschmidt.github.io/project/derivative/</link>
       <pubDate>Wed, 07 Oct 2020 00:00:00 +0000</pubDate>
       <guid>https://andgoldschmidt.github.io/project/derivative/</guid>
@@ -340,7 +340,7 @@ ax.set_ylim([-3.5,3.5])
     </item>
     
     <item>
-      <title>Hierarchical Clustering with Prototypes</title>
+      <title>Hierarchical clustering with prototypes</title>
       <link>https://andgoldschmidt.github.io/project/pyprotoclust/</link>
       <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
       <guid>https://andgoldschmidt.github.io/project/pyprotoclust/</guid>
@@ -558,13 +558,14 @@ setup(**setup_kwargs)
     </item>
     
     <item>
-      <title>CartPole</title>
+      <title>Control basics with CartPole</title>
       <link>https://andgoldschmidt.github.io/project/cartpole/</link>
       <pubDate>Mon, 09 Dec 2019 00:00:00 +0000</pubDate>
       <guid>https://andgoldschmidt.github.io/project/cartpole/</guid>
       <description>&lt;p&gt;In this &lt;a href=&#34;https://github.com/andgoldschmidt/cartpole&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;project on Github&lt;/a&gt; I coded up some tutorial concepts in control theory like observability, controllability, and the linear quadratic regulator using the example environment of a linear pendulum fixed to a cart. I also made fun Jupyter notebook movies to visualize the results.&lt;/p&gt;
 &lt;p&gt;Also included under this project are the slides I did for a short class project covering reinforcement learning (RL) for CartPole from the OpenAI lab. It&amp;rsquo;s nice to contextualize model-free RL methods for control within a familiar environment where we have covered the control theory basics.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;TODO: Turn this into a Google Colab&lt;/code&gt; &lt;a href=&#34;https://colab.research.google.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://colab.research.google.com/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;TODO: Turn this into a Google Colab&lt;/code&gt; &lt;a href=&#34;https://colab.research.google.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://colab.research.google.com/&lt;/a&gt;
+Embedding the notebook as a static webpage means there&amp;rsquo;s not a lot of fun to have with the movies so come back soon for a dynamic version of this post.&lt;/p&gt;
 </description>
     </item>
     
