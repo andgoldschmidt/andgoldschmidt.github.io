@@ -5,7 +5,7 @@
     <link>https://andgoldschmidt.github.io/pages/</link>
       <atom:link href="https://andgoldschmidt.github.io/pages/index.xml" rel="self" type="application/rss+xml" />
     <description>Pages</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Mon, 04 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png</url>
       <title>Pages</title>
@@ -15,12 +15,12 @@
     <item>
       <title></title>
       <link>https://andgoldschmidt.github.io/pages/spectral_help/</link>
-      <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
       <guid>https://andgoldschmidt.github.io/pages/spectral_help/</guid>
       <description>&lt;h2 id=&#34;helper-functions-for-spectral-dmd&#34;&gt;Helper functions for spectral DMD.&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python:&#34;&gt;    # MIT License
 
-    # Copyright (c) 2021 Andy Goldschmidt
+    # Copyright (c) 2022 Andy Goldschmidt
 
     # Permission is hereby granted, free of charge, to any person obtaining a copy
     # of this software and associated documentation files (the &amp;quot;Software&amp;quot;), to deal

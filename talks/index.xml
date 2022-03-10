@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Recent &amp; Upcoming Talks | Andy Goldschmidt</title>
+    <link>https://andgoldschmidt.github.io/talks/</link>
+      <atom:link href="https://andgoldschmidt.github.io/talks/index.xml" rel="self" type="application/rss+xml" />
+    <description>Recent &amp; Upcoming Talks</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Sun, 26 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png</url>
+      <title>Recent &amp; Upcoming Talks</title>
+      <link>https://andgoldschmidt.github.io/talks/</link>
+    </image>
+    
+    <item>
+      <title>(Talk) Bilinear Dynamic Mode Decomposition for Quantum Control at MMLDT-CSET</title>
+      <link>https://andgoldschmidt.github.io/talks/2021_09_mmldtcset/</link>
+      <pubDate>Sun, 26 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/talks/2021_09_mmldtcset/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>(Organizer) Data-Driven Methods for Quantum Dynamics and Control at SIAM CSE</title>
+      <link>https://andgoldschmidt.github.io/talks/2021_03_siamcse/</link>
+      <pubDate>Mon, 01 Mar 2021 12:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/talks/2021_03_siamcse/</guid>
+      <description>&lt;h2 id=&#34;session-1&#34;&gt;Session 1&lt;/h2&gt;
+&lt;body&gt;
+&lt;dl&gt;
+	&lt;dt&gt;
+	&lt;strong&gt;
+	9:45-10:00 Calibrating Quantum Hardware with Online Optimal Control&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109256&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Jonathan L. Dubois&lt;/em&gt;, Lawrence Livermore National Laboratory, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	10:05-10:20 Bilinear Dynamic Mode Decomposition for Quantum Control&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109258&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Andy Goldschmidt&lt;/em&gt; and
+								Eurika Kaiser, University of Washington, U.S.; Jonathan L. Dubois, Lawrence Livermore National Laboratory, U.S.; Steve Brunton, University of Washington, U.S.; J. Nathan Kutz, University of Washington, Seattle, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	10:25-10:40 Designing High-Fidelity Controls on Real Quantum Systems using&amp;nbsp;System&amp;nbsp;Identification and Reinforcement Learning&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109264&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Michael J. Biercuk&lt;/em&gt;, University of Sydney, Australia; Harrison Ball, Q-CTRL, Australia; Yuval Baum, California Institute of Technology, U.S.; Andre Carvalho, Griffith University, Brisbane, Australia; Leonardo de Castro,
+								Sean Howell,
+								Michael Hush, and
+								Per Liebermann, Q-CTRL, Australia; Pranav Mundada, Princeton University, U.S.; Felix Thomsen, Q-CTRL, Australia 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	10:45-11:00 Quantum System Compression: A Hamiltonian Guided Walk through Hilbert Space&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109702&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Robert L. Kosut&lt;/em&gt;, SC Solutions, U.S.; Herschel Rabitz and
+								Tak-San Ho, Princeton University, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	11:05-11:20 Learning the States of Quantum Dot Systems: A Ray-Based Framework&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109703&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Justyna Zwolak&lt;/em&gt;, National Institute of Standards and Technology, U.S. 
+	&lt;/dd&gt;&lt;/dl&gt;
+&lt;/body&gt;
+&lt;h2 id=&#34;session-2&#34;&gt;Session 2&lt;/h2&gt;
+&lt;body&gt;
+&lt;dl&gt;
+	&lt;dt&gt;
+	&lt;strong&gt;
+	2:15-2:30 A General Theory of Randomized Benchmarking&lt;/strong&gt;   
+    &lt;a href=&#34;dsp_talk.cfm?p=109705&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Jens Eisert&lt;/em&gt;, Freie Universität Berlin, Germany; Jonas Helsen, University of Amsterdam, Netherlands; Ingo Roth, Freie Universität Berlin, Germany; Emilio Onorati, University College London, United Kingdom; Albert H. Werner, University of Copenhagen, Denmark 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	2:35-2:50 Operational, Gauge-Free Quantum Tomography&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109706&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Olivia Di Matteo&lt;/em&gt;, TRIUMF, Canada; John Gamble and
+								Chris Granade, Microsoft Research, U.S.; Kenneth Rudinger, Sandia National Laboratories, U.S.; Nathan O. Wiebe, University of Washington, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	2:55-3:10 Linear Preservers on Infinitely Divisible Matrices through Separability&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109941&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Indu L&lt;/em&gt; and
+								Jill K Mathew, Mar Ivanios College, Trivandrum, Kerala, India 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	3:15-3:30 Machine Learning for Quantum States&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109708&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Giuseppe Carleo&lt;/em&gt;, EPFL, Switzerland 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	3:35-3:50 Learning Models of Quantum Systems from Experiments&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109710&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; Antonio Gentile and
+								Brian Flynn, University of Bristol, United Kingdom; Sebastian Knauer, University of Vienna, Austria; &lt;em&gt; Nathan O. Wiebe&lt;/em&gt;, University of Washington, U.S.; Stefano Paesani, University of Bristol, United Kingdom; Chris Granade, Microsoft Research, U.S.; John Rarity,
+								Raffaele Santagati, and
+								Anthony Laing, University of Bristol, United Kingdom 
+	&lt;/dd&gt;&lt;/dl&gt;
+&lt;/body&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

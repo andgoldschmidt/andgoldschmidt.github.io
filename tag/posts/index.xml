@@ -14,9 +14,9 @@
     
     <item>
       <title>Python package development</title>
-      <link>https://andgoldschmidt.github.io/project/poetry/</link>
+      <link>https://andgoldschmidt.github.io/posts/poetry/</link>
       <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/poetry/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/poetry/</guid>
       <description>&lt;p&gt;There are lots of features that go into packaging up Python code for other users. How can we make a project that ships easily to users and takes advantage of our normal development tools? We&amp;rsquo;ll discuss:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Poetry: for easily making and publishing a package&lt;/li&gt;

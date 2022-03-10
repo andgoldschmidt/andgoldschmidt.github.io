@@ -3,18 +3,30 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://andgoldschmidt.github.io/</loc>
-    <lastmod>2030-06-01T13:00:00+00:00</lastmod>
+    <lastmod>2022-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/slides/example/</loc>
-    <lastmod>2030-06-01T13:00:00+00:00</lastmod>
+    <loc>https://andgoldschmidt.github.io/posts/jax_mpc/</loc>
+    <lastmod>2022-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/slides/</loc>
-    <lastmod>2030-06-01T13:00:00+00:00</lastmod>
+    <loc>https://andgoldschmidt.github.io/posts/</loc>
+    <lastmod>2022-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/talk/talk-bilinear-dynamic-mode-decomposition-for-quantum-control-at-mmldt-cset/</loc>
+    <loc>https://andgoldschmidt.github.io/tag/control/</loc>
+    <lastmod>2022-03-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andgoldschmidt.github.io/tags/</loc>
+    <lastmod>2022-03-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andgoldschmidt.github.io/pages/spectral_help/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andgoldschmidt.github.io/pages/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://andgoldschmidt.github.io/talks/2021_09_mmldtcset/</loc>
     <lastmod>2021-09-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/event/</loc>
+    <loc>https://andgoldschmidt.github.io/talks/</loc>
     <lastmod>2021-09-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andgoldschmidt.github.io/publication-type/2/</loc>
@@ -26,69 +38,35 @@
     <loc>https://andgoldschmidt.github.io/publication_types/</loc>
     <lastmod>2021-03-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/publication/</loc>
+    <loc>https://andgoldschmidt.github.io/publications/</loc>
     <lastmod>2021-03-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/talk/organizer-data-driven-methods-for-quantum-dynamics-and-control-at-siam-cse/</loc>
+    <loc>https://andgoldschmidt.github.io/talks/2021_03_siamcse/</loc>
     <lastmod>2021-03-01T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/pages/spectral_help/</loc>
-    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andgoldschmidt.github.io/tag/machine-learning/</loc>
     <lastmod>2021-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/pages/</loc>
+    <loc>https://andgoldschmidt.github.io/posts/spectral_dmd/</loc>
     <lastmod>2021-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/project/</loc>
-    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/project/spectral_dmd/</loc>
-    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/tags/</loc>
-    <lastmod>2021-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/tag/academic/</loc>
-    <lastmod>2020-12-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/categories/</loc>
-    <lastmod>2020-12-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/category/demo/</loc>
-    <lastmod>2020-12-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/post/</loc>
-    <lastmod>2020-12-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/post/getting-started/</loc>
-    <lastmod>2020-12-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/tag/%E5%BC%80%E6%BA%90/</loc>
-    <lastmod>2020-12-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/category/%E6%95%99%E7%A8%8B/</loc>
-    <lastmod>2020-12-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/project/derivative/</loc>
+    <loc>https://andgoldschmidt.github.io/posts/derivative/</loc>
     <lastmod>2020-10-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/project/pyprotoclust/</loc>
+    <loc>https://andgoldschmidt.github.io/posts/pyprotoclust/</loc>
     <lastmod>2020-07-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andgoldschmidt.github.io/tag/posts/</loc>
     <lastmod>2020-05-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/project/poetry/</loc>
+    <loc>https://andgoldschmidt.github.io/posts/poetry/</loc>
     <lastmod>2020-05-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://andgoldschmidt.github.io/tag/control/</loc>
-    <lastmod>2019-12-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://andgoldschmidt.github.io/project/cartpole/</loc>
+    <loc>https://andgoldschmidt.github.io/posts/cartpole/</loc>
     <lastmod>2019-12-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://andgoldschmidt.github.io/admin/</loc>
+  </url><url>
+    <loc>https://andgoldschmidt.github.io/categories/</loc>
   </url>
 </urlset>

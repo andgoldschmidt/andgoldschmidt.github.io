@@ -14,9 +14,9 @@
     
     <item>
       <title>Spectral dynamic mode decomposition</title>
-      <link>https://andgoldschmidt.github.io/project/spectral_dmd/</link>
+      <link>https://andgoldschmidt.github.io/posts/spectral_dmd/</link>
       <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/spectral_dmd/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/spectral_dmd/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Spectral dynamic mode decomposition&lt;/strong&gt; is my term for Algorithm 1 from the paper &lt;em&gt;From Fourier to Koopman: Spectral Methods for Long-term Time Series Prediction&lt;/em&gt; by H. Lange, S.L. Brunton, J.N. Kutz (&lt;a href=&#34;https://www.youtube.com/watch?v=RBYFsFr4soo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;video&lt;/a&gt;) (&lt;a href=&#34;https://arxiv.org/abs/2004.00574&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;arXiv&lt;/a&gt;). Necessary background is a familiarity with the dynamic mode decomposition (&lt;a href=&#34;https://www.youtube.com/watch?v=sQvrK8AGCAo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;video&lt;/a&gt;) (&lt;a href=&#34;https://en.wikipedia.org/wiki/Dynamic_mode_decomposition&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Wikipedia entry&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;This project walks through a toy example I coded up in Python. The example is similar to one from the paper which gets across the main points. I have packed away the main functions for the algorithm in the utility &lt;code&gt;spectral_help.py&lt;/code&gt; which has been linked in this project&amp;rsquo;s description.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
@@ -202,10 +202,10 @@ ax.set_yscale(&#39;log&#39;)
 &lt;figure  &gt;
   &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
     &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
-               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png 400w,
-               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_fa9ef638480d69f3b09d71ebdc3dc0df.png 760w,
-               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_1200x1200_fit_lanczos_3.png 1200w&#34;
-               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png&#34;
+               /posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png 400w,
+               /posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_fa9ef638480d69f3b09d71ebdc3dc0df.png 760w,
+               /posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png&#34;
                width=&#34;635&#34;
                height=&#34;601&#34;
                loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
@@ -280,10 +280,10 @@ ax.set_ylim([-3.5,3.5])
 &lt;figure  &gt;
   &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
     &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
-               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png 400w,
-               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_40f177da89af1e202d5e880b3bcb392e.png 760w,
-               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_1200x1200_fit_lanczos_3.png 1200w&#34;
-               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png&#34;
+               /posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png 400w,
+               /posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_40f177da89af1e202d5e880b3bcb392e.png 760w,
+               /posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png&#34;
                width=&#34;760&#34;
                height=&#34;142&#34;
                loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
@@ -309,10 +309,10 @@ ax.set_ylim([-3.5,3.5])
 &lt;figure  &gt;
   &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
     &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
-               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png 400w,
-               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_bec5f35f2817b20d7d9e4c24bafd0ffa.png 760w,
-               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_1200x1200_fit_lanczos_3.png 1200w&#34;
-               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png&#34;
+               /posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png 400w,
+               /posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_bec5f35f2817b20d7d9e4c24bafd0ffa.png 760w,
+               /posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png&#34;
                width=&#34;760&#34;
                height=&#34;212&#34;
                loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
@@ -323,9 +323,9 @@ ax.set_ylim([-3.5,3.5])
     
     <item>
       <title>Better numerical derivatives for data</title>
-      <link>https://andgoldschmidt.github.io/project/derivative/</link>
+      <link>https://andgoldschmidt.github.io/posts/derivative/</link>
       <pubDate>Wed, 07 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/derivative/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/derivative/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Derivative&lt;/strong&gt; is an open-source project I started in 2019-2020 that turned into a collaboration with Markus Quade (Github, &lt;a href=&#34;https://github.com/Ohjeah&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@Ohjeah&lt;/a&gt;) and Brian de Silva (Github, &lt;a href=&#34;https://github.com/briandesilva&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@briandesilva&lt;/a&gt;). It is a standalone suite of numerical differentiation methods for noisy time series data written in Python.&lt;/p&gt;
 &lt;p&gt;The goal is to provide some common numerical differentiation techniques that showcase improvements that can be made on finite differences when data is noisy. The package binds these common differentiation methods to a single easily implemented differentiation interface to encourage user adaptation.&lt;/p&gt;
 &lt;p&gt;Derivative is a contribution to &lt;a href=&#34;https://github.com/dynamicslab/pysindy/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PySINDy&lt;/a&gt;&lt;/p&gt;
@@ -341,9 +341,9 @@ ax.set_ylim([-3.5,3.5])
     
     <item>
       <title>Hierarchical clustering with prototypes</title>
-      <link>https://andgoldschmidt.github.io/project/pyprotoclust/</link>
+      <link>https://andgoldschmidt.github.io/posts/pyprotoclust/</link>
       <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/pyprotoclust/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/pyprotoclust/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Pyprotoclust&lt;/strong&gt; is an implementatin of representative hierarchical clustering using minimax linkage. The original algorithm is from &lt;em&gt;Hierarchical Clustering With Prototypes via Minimax Linkage&lt;/em&gt; (&lt;a href=&#34;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4527350/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;DOI: 10.1198/jasa.2011.tm10183&lt;/a&gt;) by J. Bien and R. Tibshirani; Pyprotoclust takes a distance matrix as input. It returns a linkage matrix encoding the hierachical clustering as well as an additional list labelling the prototypes associated with each clustering.&lt;/p&gt;
 &lt;p&gt;I coded up a fun example inspired by the original paper where I apply the algorithm to determine representative pictures for the Olivetti Faces dataset. It can be found &lt;a href=&#34;https://pyprotoclust.readthedocs.io/en/latest/notebooks/Example.html#Olivetti-Faces&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;in the Pyprotoclust documentation&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Figure&lt;/strong&gt;: (Left) A dendrogram of the hierarchical clustering example with a dashed line at the example cut height. (Right) A scatter plot of the example with circles centered at prototypes drawn with radii equal to the top-level linkage heights of each cluster.&lt;/p&gt;
@@ -352,9 +352,9 @@ ax.set_ylim([-3.5,3.5])
     
     <item>
       <title>Control basics with CartPole</title>
-      <link>https://andgoldschmidt.github.io/project/cartpole/</link>
+      <link>https://andgoldschmidt.github.io/posts/cartpole/</link>
       <pubDate>Mon, 09 Dec 2019 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/cartpole/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/cartpole/</guid>
       <description>&lt;p&gt;In this &lt;a href=&#34;https://github.com/andgoldschmidt/cartpole&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;project on Github&lt;/a&gt; I coded up some tutorial concepts in control theory like observability, controllability, and the linear quadratic regulator using the example environment of a linear pendulum fixed to a cart. I also made fun Jupyter notebook movies to visualize the results.&lt;/p&gt;
 &lt;p&gt;Also included under this project are the slides I did for a short class project covering reinforcement learning (RL) for CartPole from the OpenAI lab. It&amp;rsquo;s nice to contextualize model-free RL methods for control within a familiar environment where we have covered the control theory basics.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;TODO: Turn this into a Google Colab&lt;/code&gt; &lt;a href=&#34;https://colab.research.google.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://colab.research.google.com/&lt;/a&gt;

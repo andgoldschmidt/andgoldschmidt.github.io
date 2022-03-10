@@ -5,7 +5,7 @@
     <link>https://andgoldschmidt.github.io/</link>
       <atom:link href="https://andgoldschmidt.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>Andy Goldschmidt</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Andy Goldschmidt</copyright><lastBuildDate>Wed, 09 Mar 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png</url>
       <title>Andy Goldschmidt</title>
@@ -13,143 +13,406 @@
     </image>
     
     <item>
-      <title>Example Talk</title>
-      <link>https://andgoldschmidt.github.io/slides/example/</link>
-      <pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/slides/example/</guid>
-      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
-  &lt;div&gt;
-    Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;Slides can be added in a few ways:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Create&lt;/strong&gt; slides using Wowchemy&amp;rsquo;s &lt;a href=&#34;https://wowchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;em&gt;Slides&lt;/em&gt;&lt;/a&gt; feature and link using &lt;code&gt;slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Upload&lt;/strong&gt; an existing slide deck to &lt;code&gt;static/&lt;/code&gt; and link using &lt;code&gt;url_slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;shortcodes&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Further event details, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;page elements&lt;/a&gt; such as image galleries, can be added to the body of this page.&lt;/p&gt;
-</description>
-    </item>
+      <title>Automatically differentiating numerical integrators</title>
+      <link>https://andgoldschmidt.github.io/posts/jax_mpc/</link>
+      <pubDate>Wed, 09 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/posts/jax_mpc/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;JAX&lt;/strong&gt; is a research project from Google. For our purpose, JAX is a way to do automatic differentiation: &lt;em&gt;With its updated version of Autograd, JAX can automatically differentiate native Python and NumPy functions. It can differentiate through loops, branches, recursion, and closures, and it can take derivatives of derivatives of derivatives.&lt;/em&gt; Numerical integration schemes are just native python and NumPy functions so JAX can automatically differentiate them. An example of when we might want to automatically differentiating numerical integrators is the control of nonlinear dynamical systems.&lt;/p&gt;
+&lt;p&gt;In particular, the purpose of this post is to learn how to do three things.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use JAX.&lt;/li&gt;
+&lt;li&gt;Implement a few numerical integration schemes.&lt;/li&gt;
+&lt;li&gt;Use JAX to linearize a numerical integration scheme.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import jax.numpy as jnp
+from jax import grad, jit, vmap, jacfwd, jacrev
+
+import numpy as np
+from tqdm.notebook import tqdm, trange
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import matplotlib.pyplot as plt
+from matplotlib.cm import ScalarMappable
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;derivatives-with-jax&#34;&gt;Derivatives with JAX&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;JAX can compute derivatives through algorithms. A nice introduction is: &lt;a href=&#34;https://www.assemblyai.com/blog/why-you-should-or-shouldnt-be-using-jax-in-2022/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.assemblyai.com/blog/why-you-should-or-shouldnt-be-using-jax-in-2022/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Here is a function, the rectified cube:
+\begin{equation}
+f(x) = |x|^3.
+\end{equation}&lt;/p&gt;
+&lt;p&gt;We can define $f(x)$ in a bit of a silly way by using an if statement.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def rectified_cube(x):
+    r = 1
+    if x &amp;lt; 0.:
+        for i in range(3):
+            r *= x
+            r = -r
+    else:
+        for i in range(3):
+            r *= x
+    return r
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;JAX can differentiate this $f(x)$ no problem.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;gradient_function = grad(rectified_cube)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;fig, ax = plt.subplots(1)
+xs = np.linspace(-1, 1)
+fx = []
+d_fx = []
+for x in xs:
+    fx.append(rectified_cube(x))
+    d_fx.append(gradient_function(x))
+ax.plot(xs, fx, xs, d_fx, lw=2)
+ax.legend([&#39;$|x|^3$&#39;, &#39;$\\frac{d}{dx} |x|^3$&#39;], fontsize=14, ncol=2)
+ax.set_xlabel(&#39;x&#39;, fontsize=14);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /posts/jax_mpc/output_8_0_hu8143b5dc0a8d9ee4a48399ab4dbba28b_12050_15ae8a3e28aa18ad12e25427c66ae0ea.png 400w,
+               /posts/jax_mpc/output_8_0_hu8143b5dc0a8d9ee4a48399ab4dbba28b_12050_73dd0e5af9ed8e0bac93fc01c34c1d85.png 760w,
+               /posts/jax_mpc/output_8_0_hu8143b5dc0a8d9ee4a48399ab4dbba28b_12050_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/jax_mpc/output_8_0_hu8143b5dc0a8d9ee4a48399ab4dbba28b_12050_15ae8a3e28aa18ad12e25427c66ae0ea.png&#34;
+               width=&#34;370&#34;
+               height=&#34;266&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;numerical-integration--autodiff&#34;&gt;Numerical integration + Autodiff&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Here is a continuous model:
+\begin{equation}
+\dot{x}(t) = f(x(t), u(t)).
+\end{equation}&lt;/p&gt;
+&lt;p&gt;In many situations in computing (like model predictive control), the continuous dynamics must be converted to a discrete model
+\begin{equation}
+x_{k + 1} = F(x_k, u_k).
+\end{equation}&lt;/p&gt;
+&lt;p&gt;The reason for the conversion is that controls are computed as a zero-order-hold over discrete time intervals. The full discrete list of control amplitudes can be optimized. In the continuous limit, the discrete list becomes a function. Working with functions is much harder and doesn&amp;rsquo;t allow for a scheme like MPC which depends on &lt;em&gt;taking a step&lt;/em&gt;. Plus, you can often use a simple basis to approximate function dynamics within the discrete time step (how?).&lt;/p&gt;
+&lt;p&gt;The RHS term $F(x_k, u_k)$ is a numerical integration. There are many ways to do this. $F$ is frequently nonlinear. Unfortunately, we really only know how to do MPC for systems with linear discrete dynamics where
+\begin{equation}
+F(x_k, u_k)=A x_k + B u_k.
+\end{equation}
+In order to do more interesting systems, we rely on locally linear approximations of $F$ in algorithms. This means the model is local about some guess trajectory, i.e. you compute matrices like
+\begin{equation}
+A \equiv \nabla_x F(x, u)|_{x_g}
+\end{equation}
+and multiply them with $x - x_g$ (it&amp;rsquo;s just the 1st order Fourier expansion). In MPC, the choice for $x_g$ (read: x-guess) is often a recently valid solution that&amp;rsquo;s been shifted to the left to accommodate the next prediction horizon. In any case, this means we want derivatives of $F$. This is where JAX comes in: &lt;strong&gt;If we know the continuous model $f$ and the algorithm $A$ we used to compute the numerical integration (i.e. $F = A \circ f$), we can find these linear approximations with automatic differentiaton.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Why might this be better? It&amp;rsquo;s hard (or at a minumum, annoying) to compute an analytic linearization of some numerical integrators $F$ even for simple nonlinear dynamics.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Exercise: Are there cases where it might not be reasonable to explicitely compute derivatives?&lt;/em&gt;&lt;/p&gt;
+&lt;!--- Answer: Derivatives are annying even for a simple example. For instance, try a bilinear system with Euler integration. It&#39;s still doable. Meanwhile, it is probably unreasonable to compute explicit derivatives for a neural network description of the dynamics. ---&gt;
+&lt;h2 id=&#34;van-der-pol-experiment&#34;&gt;Van der Pol experiment&lt;/h2&gt;
+&lt;p&gt;In this section, we&amp;rsquo;ll review some numerical integrators as preparation for thinking about how we might locally linearize them with JAX.&lt;/p&gt;
+&lt;p&gt;The toy system we will use is a driven Van der Pol oscillator,
+\begin{equation}
+\begin{aligned}
+&amp;amp;\dot{x}_1 = x_2, \&lt;br&gt;
+&amp;amp;\dot{x}_2 = -x_1 + \mu (1 - x_1^2) x_2 + u
+\end{aligned}
+\end{equation}&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def vdp(t, x, u):
+        mu = 2
+        x1, x2 = x
+        return jnp.array([
+            x2,
+            -x1 + mu * (1 - x1 ** 2) * x2 + u
+        ])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;euler-integration&#34;&gt;Euler integration&lt;/h2&gt;
+&lt;p&gt;The simplest choice for numerical integration is Euler integration, which combines the definition of the derivative
+\begin{equation}
+\dot{x}(t) = \lim_{\Delta t \rightarrow 0} \frac{\Delta x}{\Delta t}
+\end{equation}
+with the dynamics $\dot{x}(t) = f(t, x(t), u(t))$ such that
+\begin{equation}
+\frac{x_{k+1} - x_k}{\Delta t} \approx f(k, x_k, u_k)
+\end{equation}
+so
+\begin{equation}
+x_{k+1} \approx x_k + \Delta t f(k, x_k, u_k) \equiv F(x_k, u_k)
+\end{equation}&lt;/p&gt;
+&lt;p&gt;Set $z_k = [x_k, u_k]$ for simplicity.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def euler(z, dt=1):
+    return z[:2] + dt * vdp(_, z[:2], z[2])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Driving is external; set a policy.
+def u_fn(t):
+    return jnp.zeros_like(t)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;One fun thing to do is break the numerical integration by taking steps that are too big. Do that by dividing the interval [0,15] into 100 steps.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Simulate the oscillator.
+ts = jnp.linspace(0, 15, 100)
+dt = ts[1] - ts[0]
+
+t0 = ts[0]
+x0 = jnp.array([[1], [-2]])
+
+xs = [None] * (len(ts) + 1)
+xs[0] = x0
+for i, t in tqdm(enumerate(ts), total=len(ts)):
+    z = jnp.vstack([xs[i], u_fn(t)])
+    xs[i + 1] = euler(z, dt)
+xs = jnp.hstack(xs)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;x1, x2 = xs
+fig, ax = plt.subplots(1, figsize=[8,8])
+ax.plot(x1, x2, lw=5)
+ax.set_aspect(&#39;equal&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /posts/jax_mpc/output_22_0_hue69bbd6c2d49dea55bf72d162e1c0cb2_19379_e07c234137738ed42c9e41d2fa6dc3e6.png 400w,
+               /posts/jax_mpc/output_22_0_hue69bbd6c2d49dea55bf72d162e1c0cb2_19379_ec645fb030a4e79f024a3168eaaf15ac.png 760w,
+               /posts/jax_mpc/output_22_0_hue69bbd6c2d49dea55bf72d162e1c0cb2_19379_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/jax_mpc/output_22_0_hue69bbd6c2d49dea55bf72d162e1c0cb2_19379_e07c234137738ed42c9e41d2fa6dc3e6.png&#34;
+               width=&#34;275&#34;
+               height=&#34;466&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;We can compute the Jacobian of $F(x_k, u_k)$ using JAX. That is, we want to compute the derivative to arrive at a matrix, $\nabla_z F(z)$. There are a few ways to do this with JAX.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Differentiate (retain ability to use other args)
+jac_euler = jacfwd(euler)
+
+# Is prefixing values faster? Not by much.
+jac_euler_2 = jacfwd(lambda z: euler(z, dt))
+
+# Is backward faster? No way! Recall: Why not?
+jac_euler_3 = jacrev(euler)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;jac_xs = [None] * len(ts)
+det_jac_xs = [None] * len(ts)
+for i, t in tqdm(enumerate(ts), total=len(ts)):
+    z = jnp.vstack([xs[:, i][:, None], u_fn(t)])
+    jac_xs[i] = jac_euler(z.squeeze(), dt)
+    det_jac_xs[i] = np.linalg.det(jac_xs[i][:, :2])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;$\nabla_z F(z)$ is a matrix. Our goal in a first order linearization is to compute something like $\Delta F = \nabla_z F(z) \cdot \Delta z$. Here, let&amp;rsquo;s do that for the $x$ values.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Find the differential of F
+dx = xs[:, 1:] - xs[:, :-1]
+df = np.vstack([jac_xs[i][:,:2] @ dx[:, i] for i in range(len(ts))]).T
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice that the derivatives are only as good as our numerical integration (which we already decided to break). Keep in mind that this is the behavior you would get even if you did analytic derivatives with respect to the Euler integration scheme.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Plot tangent vectors colored by the determinant of the Jacobian
+fig, ax = plt.subplots(1, figsize=[8, 8])
+cmap = plt.get_cmap(&#39;viridis&#39;)
+norm = plt.Normalize(min(det_jac_xs), max(det_jac_xs))
+for i in range(len(ts)):
+    ax.arrow(x1[i], x2[i], df[0][i], df[1][i], width=.05,
+             color=cmap(norm(det_jac_xs[i])))
+ax.set_aspect(&#39;equal&#39;)
+fig.colorbar(ScalarMappable(norm=norm, cmap=cmap))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /posts/jax_mpc/output_29_1_hub5c88f3ef96019b9183e27e037120f77_32601_fb708b83c3764acf83b599426db472f7.png 400w,
+               /posts/jax_mpc/output_29_1_hub5c88f3ef96019b9183e27e037120f77_32601_56bd4bcfecec0840b15fe735c0e66bde.png 760w,
+               /posts/jax_mpc/output_29_1_hub5c88f3ef96019b9183e27e037120f77_32601_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/jax_mpc/output_29_1_hub5c88f3ef96019b9183e27e037120f77_32601_fb708b83c3764acf83b599426db472f7.png&#34;
+               width=&#34;359&#34;
+               height=&#34;466&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;If you want to peak at the matrix assoicated to $\nabla_z F(z)$, then you need to act on basis vectors.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;basis = [None] * (xs.shape[0] + 1)
+for i in range(len(basis)):
+    basis[i] = np.zeros([xs.shape[0] + 1, 1])
+    basis[i][i] = 1
     
-    <item>
-      <title>(Talk) Bilinear Dynamic Mode Decomposition for Quantum Control at MMLDT-CSET</title>
-      <link>https://andgoldschmidt.github.io/talk/talk-bilinear-dynamic-mode-decomposition-for-quantum-control-at-mmldt-cset/</link>
-      <pubDate>Sun, 26 Sep 2021 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/talk/talk-bilinear-dynamic-mode-decomposition-for-quantum-control-at-mmldt-cset/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bilinear dynamic mode decomposition for quantum control</title>
-      <link>https://andgoldschmidt.github.io/publication/bidmd/</link>
-      <pubDate>Mon, 22 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/publication/bidmd/</guid>
-      <description>&lt;!-- 
-&lt;div class=&#34;alert alert-note&#34;&gt;
-  &lt;div&gt;
-    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
-  &lt;/div&gt;
-&lt;/div&gt;
- --&gt;
-&lt;!-- &lt;div class=&#34;alert alert-note&#34;&gt;
-  &lt;div&gt;
-    Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
-  &lt;/div&gt;
-&lt;/div&gt;
- --&gt;
-&lt;p&gt;&lt;strong&gt;Caption for the figure:&lt;/strong&gt; The trajectory of a qubit driven by a linearly-polarized semi-classical drive $\textrm{u}(t)$ (Hamiltonian: $H(t) = \pi \sigma_z + \textrm{u}(t) \sigma_x$) is shown on the Bloch sphere in (a). The corresponding Pauli-spin measurements are shown in (b). Measurements $\mathbf{x}_j$, $j=1,2,\dots$, are taken at discrete time steps and assembled into offset snapshot matrices $\mathbf{X}$ and $\mathbf{X}&#39;$ in (c). The bilinear Dynamic Mode Decomposition (d) is a regression-based algorithm that uses the assembled data matrices and control input from sufficiently-resolved data to learn the intrinsic dynamics, $\mathbf{A}$ and the control, $\mathbf{B}$, for the bilinear dynamics.&lt;/p&gt;
-&lt;!-- Supplementary notes can be added here, including [code, math, and images](https://wowchemy.com/docs/writing-markdown-latex/). --&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>(Organizer) Data-Driven Methods for Quantum Dynamics and Control at SIAM CSE</title>
-      <link>https://andgoldschmidt.github.io/talk/organizer-data-driven-methods-for-quantum-dynamics-and-control-at-siam-cse/</link>
-      <pubDate>Mon, 01 Mar 2021 12:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/talk/organizer-data-driven-methods-for-quantum-dynamics-and-control-at-siam-cse/</guid>
-      <description>&lt;h2 id=&#34;session-1&#34;&gt;Session 1&lt;/h2&gt;
-&lt;body&gt;
-&lt;dl&gt;
-	&lt;dt&gt;
-	&lt;strong&gt;
-	9:45-10:00 Calibrating Quantum Hardware with Online Optimal Control&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109256&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Jonathan L. Dubois&lt;/em&gt;, Lawrence Livermore National Laboratory, U.S. 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	10:05-10:20 Bilinear Dynamic Mode Decomposition for Quantum Control&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109258&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Andy Goldschmidt&lt;/em&gt; and
-								Eurika Kaiser, University of Washington, U.S.; Jonathan L. Dubois, Lawrence Livermore National Laboratory, U.S.; Steve Brunton, University of Washington, U.S.; J. Nathan Kutz, University of Washington, Seattle, U.S. 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	10:25-10:40 Designing High-Fidelity Controls on Real Quantum Systems using&amp;nbsp;System&amp;nbsp;Identification and Reinforcement Learning&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109264&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Michael J. Biercuk&lt;/em&gt;, University of Sydney, Australia; Harrison Ball, Q-CTRL, Australia; Yuval Baum, California Institute of Technology, U.S.; Andre Carvalho, Griffith University, Brisbane, Australia; Leonardo de Castro,
-								Sean Howell,
-								Michael Hush, and
-								Per Liebermann, Q-CTRL, Australia; Pranav Mundada, Princeton University, U.S.; Felix Thomsen, Q-CTRL, Australia 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	10:45-11:00 Quantum System Compression: A Hamiltonian Guided Walk through Hilbert Space&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109702&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Robert L. Kosut&lt;/em&gt;, SC Solutions, U.S.; Herschel Rabitz and
-								Tak-San Ho, Princeton University, U.S. 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	11:05-11:20 Learning the States of Quantum Dot Systems: A Ray-Based Framework&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109703&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Justyna Zwolak&lt;/em&gt;, National Institute of Standards and Technology, U.S. 
-	&lt;/dd&gt;&lt;/dl&gt;
-&lt;/body&gt;
-&lt;h2 id=&#34;session-2&#34;&gt;Session 2&lt;/h2&gt;
-&lt;body&gt;
-&lt;dl&gt;
-	&lt;dt&gt;
-	&lt;strong&gt;
-	2:15-2:30 A General Theory of Randomized Benchmarking&lt;/strong&gt;   
-    &lt;a href=&#34;dsp_talk.cfm?p=109705&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Jens Eisert&lt;/em&gt;, Freie Universität Berlin, Germany; Jonas Helsen, University of Amsterdam, Netherlands; Ingo Roth, Freie Universität Berlin, Germany; Emilio Onorati, University College London, United Kingdom; Albert H. Werner, University of Copenhagen, Denmark 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	2:35-2:50 Operational, Gauge-Free Quantum Tomography&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109706&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Olivia Di Matteo&lt;/em&gt;, TRIUMF, Canada; John Gamble and
-								Chris Granade, Microsoft Research, U.S.; Kenneth Rudinger, Sandia National Laboratories, U.S.; Nathan O. Wiebe, University of Washington, U.S. 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	2:55-3:10 Linear Preservers on Infinitely Divisible Matrices through Separability&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109941&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Indu L&lt;/em&gt; and
-								Jill K Mathew, Mar Ivanios College, Trivandrum, Kerala, India 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	3:15-3:30 Machine Learning for Quantum States&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109708&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Giuseppe Carleo&lt;/em&gt;, EPFL, Switzerland 
-	&lt;/dd&gt;&lt;dt&gt;
-	&lt;strong&gt;
-	3:35-3:50 Learning Models of Quantum Systems from Experiments&lt;/strong&gt; 
-    &lt;a href=&#34;dsp_talk.cfm?p=109710&#34;&gt;abstract&lt;/a&gt;
-	&lt;/dt&gt;&lt;dd&gt; Antonio Gentile and
-								Brian Flynn, University of Bristol, United Kingdom; Sebastian Knauer, University of Vienna, Austria; &lt;em&gt; Nathan O. Wiebe&lt;/em&gt;, University of Washington, U.S.; Stefano Paesani, University of Bristol, United Kingdom; Chris Granade, Microsoft Research, U.S.; John Rarity,
-								Raffaele Santagati, and
-								Anthony Laing, University of Bristol, United Kingdom 
-	&lt;/dd&gt;&lt;/dl&gt;
-&lt;/body&gt;
+z0 = jnp.vstack([xs[:, 0][:, None], u_fn(t)])
+np.hstack([jac_euler(z0.squeeze(), dt) @ b for b in basis])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;array([[1.        , 0.15151516, 0.        ],
+       [1.0606061 , 1.        , 0.15151516]], dtype=float32)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;runge-kutta-methods&#34;&gt;Runge-Kutta methods&lt;/h2&gt;
+&lt;p&gt;One nice thing with JAX is that if we pick more interesting numerical integration schemes, we don&amp;rsquo;t have to worry about computing the analytic derivative of the more complicated function $F(x_k, u_k)$. Let&amp;rsquo;s see this in action.&lt;/p&gt;
+&lt;p&gt;Generalize the Euler method so that
+\begin{equation}
+x_{k+1} \approx x_k + \Delta t \phi(k, x_k, u_k) \equiv F(x_k, u_k)
+\end{equation}
+with $\phi$ some new function defined to reduce errors by leveraging intermediate evaluations of $f$.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m not going to derive it, but one way to improve things is the classic 4th order Runge-Kutta:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+x_{k+1} \approx x_k + \frac{\Delta t}{6} (f_1 + 2 f_2 + 2 f_3 + f_4)
+\end{equation}
+where&lt;/p&gt;
+&lt;p&gt;$f_1 = f(t_k, x_k, u_k)$,&lt;/p&gt;
+&lt;p&gt;$f_2 = f(t_k + \Delta t / 2, x_k + f_1 \Delta t / 2, u_k)$,&lt;/p&gt;
+&lt;p&gt;$f_3 = f(t_k + \Delta t / 2, x_k + f_2 \Delta t / 2, u_k)$,&lt;/p&gt;
+&lt;p&gt;$f_4 = f(t_k + \Delta t, x_k +  f_3 \Delta t, u_k)$.&lt;/p&gt;
+&lt;p&gt;Why do we modify the $x$ arguments in the function, but not the $u$ arguments? First off, we assume $f$ is a known function, but we don&amp;rsquo;t know anything about the control policy. Our control assumption is actually zero-order-hold so we are assuming $u_k$ won&amp;rsquo;t vary within our step. This is pretty important for the validity of the scheme. Luckily we&amp;rsquo;re in charge of the control so we can set this.&lt;/p&gt;
+&lt;p&gt;For completeness, let&amp;rsquo;s just say we don&amp;rsquo;t make the assumption of zero order hold. Then the Runge-Kutta approximation is not going to satisfy the promised accuracy, and we don&amp;rsquo;t have any way to improve the integration by cancelling Fourier terms like we did with $x$ (this is because $u$ is not constrained by a function). One final way to think about this: if we did know the policy, then $f(t, x, u) \mapsto f(t, x, \pi(t, x)) \equiv f^\pi(t, x)$ and we can have no gradients with respect to $u$ because it is fixed by the policy.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Again, we don&#39;t have explicit time dependence. 
+# Exercise: How would things change?
+def rk4(z, dt=1):
+    f1 = vdp(_, z[:2], z[2])
+    f2 = vdp(_, z[:2] + f1 * dt / 2, z[2])
+    f3 = vdp(_, z[:2] + f2 * dt / 2, z[2])
+    f4 = vdp(_, z[:2] + f3 * dt, z[2])
+    return z[:2] + (f1 + 2 * f2 + 2 * f3 + f4) * dt / 6
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Pick the same time scheme as before, but now we&amp;rsquo;re going to get a much better numerical integration with our improved method.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Simulate the oscillator.
+xs = [None] * (len(ts) + 1)
+xs[0] = x0
+for i, t in tqdm(enumerate(ts), total=len(ts)):
+    z = jnp.vstack([xs[i], u_fn(t)])
+    xs[i + 1] = rk4(z, dt)
+xs = jnp.hstack(xs)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;x1, x2 = xs
+fig, ax = plt.subplots(1, figsize=[8,8])
+ax.plot(x1, x2, lw=5)
+ax.set_aspect(&#39;equal&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /posts/jax_mpc/output_40_0_huf9ba5c23501be01829d4667c481b151b_17632_ff99742bcbe18cf709e955ffc73a47f4.png 400w,
+               /posts/jax_mpc/output_40_0_huf9ba5c23501be01829d4667c481b151b_17632_32f801381eaeff81727c764fd973909e.png 760w,
+               /posts/jax_mpc/output_40_0_huf9ba5c23501be01829d4667c481b151b_17632_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/jax_mpc/output_40_0_huf9ba5c23501be01829d4667c481b151b_17632_ff99742bcbe18cf709e955ffc73a47f4.png&#34;
+               width=&#34;247&#34;
+               height=&#34;466&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;Repeat the same differentiation process using JAX to get improved derivatives inherited directly from the improved numerical integration.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Differentiate
+jac_rk4 = jacfwd(rk4)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;jac_xs = [None] * len(ts)
+det_jac_xs = [None] * len(ts)
+for i, t in tqdm(enumerate(ts), total=len(ts)):
+    z = jnp.vstack([xs[:, i][:, None], u_fn(t)])
+    jac_xs[i] = jac_rk4(z.squeeze(), dt)
+    det_jac_xs[i] = np.linalg.det(jac_xs[i][:, :2])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;  0%|          | 0/100 [00:00&amp;lt;?, ?it/s]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Find the differential of F
+dx = xs[:, 1:] - xs[:, :-1]
+df = np.vstack([jac_xs[i][:,:2] @ dx[:, i] for i in range(len(ts))]).T
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Plot tangent vectors colored by the determinant of the Jacobian
+fig, ax = plt.subplots(1, figsize=[8, 8])
+cmap = plt.get_cmap(&#39;viridis&#39;)
+norm = plt.Normalize(min(det_jac_xs), max(det_jac_xs))
+for i in range(len(ts)):
+    ax.arrow(x1[i], x2[i], df[0][i], df[1][i], width=.05,
+             color=cmap(norm(det_jac_xs[i])))
+ax.set_aspect(&#39;equal&#39;)
+fig.colorbar(ScalarMappable(norm=norm, cmap=cmap))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
+               /posts/jax_mpc/output_45_1_hu4f73d3c8882ffb8b9f49e9d2c6a9f7dd_32136_4c630a5bdc5bf5a8dbc06632e4f234b5.png 400w,
+               /posts/jax_mpc/output_45_1_hu4f73d3c8882ffb8b9f49e9d2c6a9f7dd_32136_c398f8c18dba9a2ba70ca381359fe9ed.png 760w,
+               /posts/jax_mpc/output_45_1_hu4f73d3c8882ffb8b9f49e9d2c6a9f7dd_32136_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/jax_mpc/output_45_1_hu4f73d3c8882ffb8b9f49e9d2c6a9f7dd_32136_4c630a5bdc5bf5a8dbc06632e4f234b5.png&#34;
+               width=&#34;318&#34;
+               height=&#34;466&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;Nice derivatives.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title></title>
       <link>https://andgoldschmidt.github.io/pages/spectral_help/</link>
-      <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
       <guid>https://andgoldschmidt.github.io/pages/spectral_help/</guid>
       <description>&lt;h2 id=&#34;helper-functions-for-spectral-dmd&#34;&gt;Helper functions for spectral DMD.&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python:&#34;&gt;    # MIT License
 
-    # Copyright (c) 2021 Andy Goldschmidt
+    # Copyright (c) 2022 Andy Goldschmidt
 
     # Permission is hereby granted, free of charge, to any person obtaining a copy
     # of this software and associated documentation files (the &amp;quot;Software&amp;quot;), to deal
@@ -364,10 +627,119 @@
     </item>
     
     <item>
+      <title>(Talk) Bilinear Dynamic Mode Decomposition for Quantum Control at MMLDT-CSET</title>
+      <link>https://andgoldschmidt.github.io/talks/2021_09_mmldtcset/</link>
+      <pubDate>Sun, 26 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/talks/2021_09_mmldtcset/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bilinear dynamic mode decomposition for quantum control</title>
+      <link>https://andgoldschmidt.github.io/publication/bidmd/</link>
+      <pubDate>Mon, 22 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/publication/bidmd/</guid>
+      <description>&lt;!-- 
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
+  &lt;/div&gt;
+&lt;/div&gt;
+ --&gt;
+&lt;!-- &lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
+  &lt;/div&gt;
+&lt;/div&gt;
+ --&gt;
+&lt;p&gt;&lt;strong&gt;Caption for the figure:&lt;/strong&gt; The trajectory of a qubit driven by a linearly-polarized semi-classical drive $\textrm{u}(t)$ (Hamiltonian: $H(t) = \pi \sigma_z + \textrm{u}(t) \sigma_x$) is shown on the Bloch sphere in (a). The corresponding Pauli-spin measurements are shown in (b). Measurements $\mathbf{x}_j$, $j=1,2,\dots$, are taken at discrete time steps and assembled into offset snapshot matrices $\mathbf{X}$ and $\mathbf{X}&#39;$ in (c). The bilinear Dynamic Mode Decomposition (d) is a regression-based algorithm that uses the assembled data matrices and control input from sufficiently-resolved data to learn the intrinsic dynamics, $\mathbf{A}$ and the control, $\mathbf{B}$, for the bilinear dynamics.&lt;/p&gt;
+&lt;!-- Supplementary notes can be added here, including [code, math, and images](https://wowchemy.com/docs/writing-markdown-latex/). --&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>(Organizer) Data-Driven Methods for Quantum Dynamics and Control at SIAM CSE</title>
+      <link>https://andgoldschmidt.github.io/talks/2021_03_siamcse/</link>
+      <pubDate>Mon, 01 Mar 2021 12:00:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/talks/2021_03_siamcse/</guid>
+      <description>&lt;h2 id=&#34;session-1&#34;&gt;Session 1&lt;/h2&gt;
+&lt;body&gt;
+&lt;dl&gt;
+	&lt;dt&gt;
+	&lt;strong&gt;
+	9:45-10:00 Calibrating Quantum Hardware with Online Optimal Control&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109256&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Jonathan L. Dubois&lt;/em&gt;, Lawrence Livermore National Laboratory, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	10:05-10:20 Bilinear Dynamic Mode Decomposition for Quantum Control&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109258&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Andy Goldschmidt&lt;/em&gt; and
+								Eurika Kaiser, University of Washington, U.S.; Jonathan L. Dubois, Lawrence Livermore National Laboratory, U.S.; Steve Brunton, University of Washington, U.S.; J. Nathan Kutz, University of Washington, Seattle, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	10:25-10:40 Designing High-Fidelity Controls on Real Quantum Systems using&amp;nbsp;System&amp;nbsp;Identification and Reinforcement Learning&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109264&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Michael J. Biercuk&lt;/em&gt;, University of Sydney, Australia; Harrison Ball, Q-CTRL, Australia; Yuval Baum, California Institute of Technology, U.S.; Andre Carvalho, Griffith University, Brisbane, Australia; Leonardo de Castro,
+								Sean Howell,
+								Michael Hush, and
+								Per Liebermann, Q-CTRL, Australia; Pranav Mundada, Princeton University, U.S.; Felix Thomsen, Q-CTRL, Australia 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	10:45-11:00 Quantum System Compression: A Hamiltonian Guided Walk through Hilbert Space&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109702&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Robert L. Kosut&lt;/em&gt;, SC Solutions, U.S.; Herschel Rabitz and
+								Tak-San Ho, Princeton University, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	11:05-11:20 Learning the States of Quantum Dot Systems: A Ray-Based Framework&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109703&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Justyna Zwolak&lt;/em&gt;, National Institute of Standards and Technology, U.S. 
+	&lt;/dd&gt;&lt;/dl&gt;
+&lt;/body&gt;
+&lt;h2 id=&#34;session-2&#34;&gt;Session 2&lt;/h2&gt;
+&lt;body&gt;
+&lt;dl&gt;
+	&lt;dt&gt;
+	&lt;strong&gt;
+	2:15-2:30 A General Theory of Randomized Benchmarking&lt;/strong&gt;   
+    &lt;a href=&#34;dsp_talk.cfm?p=109705&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Jens Eisert&lt;/em&gt;, Freie Universität Berlin, Germany; Jonas Helsen, University of Amsterdam, Netherlands; Ingo Roth, Freie Universität Berlin, Germany; Emilio Onorati, University College London, United Kingdom; Albert H. Werner, University of Copenhagen, Denmark 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	2:35-2:50 Operational, Gauge-Free Quantum Tomography&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109706&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Olivia Di Matteo&lt;/em&gt;, TRIUMF, Canada; John Gamble and
+								Chris Granade, Microsoft Research, U.S.; Kenneth Rudinger, Sandia National Laboratories, U.S.; Nathan O. Wiebe, University of Washington, U.S. 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	2:55-3:10 Linear Preservers on Infinitely Divisible Matrices through Separability&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109941&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Indu L&lt;/em&gt; and
+								Jill K Mathew, Mar Ivanios College, Trivandrum, Kerala, India 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	3:15-3:30 Machine Learning for Quantum States&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109708&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; &lt;em&gt; Giuseppe Carleo&lt;/em&gt;, EPFL, Switzerland 
+	&lt;/dd&gt;&lt;dt&gt;
+	&lt;strong&gt;
+	3:35-3:50 Learning Models of Quantum Systems from Experiments&lt;/strong&gt; 
+    &lt;a href=&#34;dsp_talk.cfm?p=109710&#34;&gt;abstract&lt;/a&gt;
+	&lt;/dt&gt;&lt;dd&gt; Antonio Gentile and
+								Brian Flynn, University of Bristol, United Kingdom; Sebastian Knauer, University of Vienna, Austria; &lt;em&gt; Nathan O. Wiebe&lt;/em&gt;, University of Washington, U.S.; Stefano Paesani, University of Bristol, United Kingdom; Chris Granade, Microsoft Research, U.S.; John Rarity,
+								Raffaele Santagati, and
+								Anthony Laing, University of Bristol, United Kingdom 
+	&lt;/dd&gt;&lt;/dl&gt;
+&lt;/body&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Spectral dynamic mode decomposition</title>
-      <link>https://andgoldschmidt.github.io/project/spectral_dmd/</link>
+      <link>https://andgoldschmidt.github.io/posts/spectral_dmd/</link>
       <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/spectral_dmd/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/spectral_dmd/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Spectral dynamic mode decomposition&lt;/strong&gt; is my term for Algorithm 1 from the paper &lt;em&gt;From Fourier to Koopman: Spectral Methods for Long-term Time Series Prediction&lt;/em&gt; by H. Lange, S.L. Brunton, J.N. Kutz (&lt;a href=&#34;https://www.youtube.com/watch?v=RBYFsFr4soo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;video&lt;/a&gt;) (&lt;a href=&#34;https://arxiv.org/abs/2004.00574&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;arXiv&lt;/a&gt;). Necessary background is a familiarity with the dynamic mode decomposition (&lt;a href=&#34;https://www.youtube.com/watch?v=sQvrK8AGCAo&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;video&lt;/a&gt;) (&lt;a href=&#34;https://en.wikipedia.org/wiki/Dynamic_mode_decomposition&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Wikipedia entry&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;This project walks through a toy example I coded up in Python. The example is similar to one from the paper which gets across the main points. I have packed away the main functions for the algorithm in the utility &lt;code&gt;spectral_help.py&lt;/code&gt; which has been linked in this project&amp;rsquo;s description.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
@@ -553,10 +925,10 @@ ax.set_yscale(&#39;log&#39;)
 &lt;figure  &gt;
   &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
     &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
-               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png 400w,
-               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_fa9ef638480d69f3b09d71ebdc3dc0df.png 760w,
-               /project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_1200x1200_fit_lanczos_3.png 1200w&#34;
-               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png&#34;
+               /posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png 400w,
+               /posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_fa9ef638480d69f3b09d71ebdc3dc0df.png 760w,
+               /posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/spectral_dmd/output_8_0_hu30a7000c7500c37f930b556e7840238b_35632_da992a4cde976d6430ac9d6838d40a67.png&#34;
                width=&#34;635&#34;
                height=&#34;601&#34;
                loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
@@ -631,10 +1003,10 @@ ax.set_ylim([-3.5,3.5])
 &lt;figure  &gt;
   &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
     &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
-               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png 400w,
-               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_40f177da89af1e202d5e880b3bcb392e.png 760w,
-               /project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_1200x1200_fit_lanczos_3.png 1200w&#34;
-               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png&#34;
+               /posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png 400w,
+               /posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_40f177da89af1e202d5e880b3bcb392e.png 760w,
+               /posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/spectral_dmd/output_10_1_hud71e81e40d92cfc4dd622625fec7d59d_50350_0aaee56126f71e3c3b2081ee028f035b.png&#34;
                width=&#34;760&#34;
                height=&#34;142&#34;
                loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
@@ -660,10 +1032,10 @@ ax.set_ylim([-3.5,3.5])
 &lt;figure  &gt;
   &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
     &lt;div class=&#34;w-100&#34; &gt;&lt;img alt=&#34;png&#34; srcset=&#34;
-               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png 400w,
-               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_bec5f35f2817b20d7d9e4c24bafd0ffa.png 760w,
-               /project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_1200x1200_fit_lanczos_3.png 1200w&#34;
-               src=&#34;https://andgoldschmidt.github.io/project/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png&#34;
+               /posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png 400w,
+               /posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_bec5f35f2817b20d7d9e4c24bafd0ffa.png 760w,
+               /posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_1200x1200_fit_lanczos_3.png 1200w&#34;
+               src=&#34;https://andgoldschmidt.github.io/posts/spectral_dmd/output_10_2_hu06f9e836a8ac563a2819214fbf73255e_110427_e7a65ff9c7a4bf3ef0623c0f8f182904.png&#34;
                width=&#34;760&#34;
                height=&#34;212&#34;
                loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
@@ -673,87 +1045,10 @@ ax.set_ylim([-3.5,3.5])
     </item>
     
     <item>
-      <title>Welcome to Wowchemy, the website builder for Hugo</title>
-      <link>https://andgoldschmidt.github.io/post/getting-started/</link>
-      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/post/getting-started/</guid>
-      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;The Wowchemy website builder for Hugo, along with its starter templates, is designed for professional creators, educators, and teams/organizations - although it can be used to create any kind of site&lt;/li&gt;
-&lt;li&gt;The template can be modified and customised to suit your needs. It&amp;rsquo;s a good platform for anyone looking to take control of their data and online identity whilst having the convenience to start off with a &lt;strong&gt;no-code solution (write in Markdown and customize with YAML parameters)&lt;/strong&gt; and having &lt;strong&gt;flexibility to later add even deeper personalization with HTML and CSS&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;You can work with all your favourite tools and apps with hundreds of plugins and integrations to speed up your workflows, interact with your readers, and much more&lt;/li&gt;
-&lt;/ol&gt;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-&lt;figure  id=&#34;figure-the-template-is-mobile-first-with-a-responsive-design-to-ensure-that-your-site-looks-stunning-on-every-device&#34;&gt;
-  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
-    &lt;div class=&#34;w-100&#34; &gt;&lt;img src=&#34;https://raw.githubusercontent.com/wowchemy/wowchemy-hugo-modules/master/academic.png&#34; alt=&#34;The template is mobile first with a responsive design to ensure that your site looks stunning on every device.&#34; loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
-  &lt;/div&gt;&lt;figcaption&gt;
-      The template is mobile first with a responsive design to ensure that your site looks stunning on every device.
-    &lt;/figcaption&gt;&lt;/figure&gt;
-&lt;h2 id=&#34;get-started&#34;&gt;Get Started&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;👉 &lt;a href=&#34;https://wowchemy.com/templates/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Create a new site&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📚 &lt;a href=&#34;https://wowchemy.com/docs/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Personalize your site&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;💬 &lt;a href=&#34;https://discord.gg/z8wNYzb&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Chat with the &lt;strong&gt;Wowchemy community&lt;/strong&gt;&lt;/a&gt; or &lt;a href=&#34;https://discourse.gohugo.io&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Hugo community&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🐦 Twitter: &lt;a href=&#34;https://twitter.com/wowchemy&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@wowchemy&lt;/a&gt; &lt;a href=&#34;https://twitter.com/GeorgeCushen&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@GeorgeCushen&lt;/a&gt; &lt;a href=&#34;https://twitter.com/search?q=%28%23MadeWithWowchemy%20OR%20%23MadeWithAcademic%29&amp;amp;src=typed_query&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;#MadeWithWowchemy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;💡 &lt;a href=&#34;https://github.com/wowchemy/wowchemy-hugo-modules/issues&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Request a &lt;strong&gt;feature&lt;/strong&gt; or report a &lt;strong&gt;bug&lt;/strong&gt; for &lt;em&gt;Wowchemy&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;⬆️ &lt;strong&gt;Updating Wowchemy?&lt;/strong&gt; View the &lt;a href=&#34;https://wowchemy.com/docs/hugo-tutorials/update/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Update Tutorial&lt;/a&gt; and &lt;a href=&#34;https://wowchemy.com/updates/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Release Notes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;crowd-funded-open-source-software&#34;&gt;Crowd-funded open-source software&lt;/h2&gt;
-&lt;p&gt;To help us develop this template and software sustainably under the MIT license, we ask all individuals and businesses that use it to help support its ongoing maintenance and development via sponsorship.&lt;/p&gt;
-&lt;h3 id=&#34;-click-here-to-become-a-sponsor-and-help-support-wowchemys-future-httpswowchemycomplans&#34;&gt;&lt;a href=&#34;https://wowchemy.com/plans/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;❤️ Click here to become a sponsor and help support Wowchemy&amp;rsquo;s future ❤️&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;As a token of appreciation for sponsoring, you can &lt;strong&gt;unlock &lt;a href=&#34;https://wowchemy.com/plans/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;these&lt;/a&gt; awesome rewards and extra features 🦄✨&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;ecosystem&#34;&gt;Ecosystem&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://github.com/wowchemy/hugo-academic-cli&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Hugo Academic CLI&lt;/a&gt;:&lt;/strong&gt; Automatically import publications from BibTeX&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;inspiration&#34;&gt;Inspiration&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://academic-demo.netlify.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Check out the latest &lt;strong&gt;demo&lt;/strong&gt;&lt;/a&gt; of what you&amp;rsquo;ll get in less than 10 minutes, or &lt;a href=&#34;https://wowchemy.com/user-stories/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;view the &lt;strong&gt;showcase&lt;/strong&gt;&lt;/a&gt; of personal, project, and business sites.&lt;/p&gt;
-&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Page builder&lt;/strong&gt; - Create &lt;em&gt;anything&lt;/em&gt; with &lt;a href=&#34;https://wowchemy.com/docs/page-builder/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;widgets&lt;/strong&gt;&lt;/a&gt; and &lt;a href=&#34;https://wowchemy.com/docs/content/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;elements&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Edit any type of content&lt;/strong&gt; - Blog posts, publications, talks, slides, projects, and more!&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Create content&lt;/strong&gt; in &lt;a href=&#34;https://wowchemy.com/docs/content/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Markdown&lt;/strong&gt;&lt;/a&gt;, &lt;a href=&#34;https://wowchemy.com/docs/import/jupyter/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Jupyter&lt;/strong&gt;&lt;/a&gt;, or &lt;a href=&#34;https://wowchemy.com/docs/install-locally/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;RStudio&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Plugin System&lt;/strong&gt; - Fully customizable &lt;a href=&#34;https://wowchemy.com/docs/customization/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;color&lt;/strong&gt; and &lt;strong&gt;font themes&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Display Code and Math&lt;/strong&gt; - Code highlighting and &lt;a href=&#34;https://en.wikibooks.org/wiki/LaTeX/Mathematics&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;LaTeX math&lt;/a&gt; supported&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Integrations&lt;/strong&gt; - &lt;a href=&#34;https://analytics.google.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Google Analytics&lt;/a&gt;, &lt;a href=&#34;https://disqus.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Disqus commenting&lt;/a&gt;, Maps, Contact Forms, and more!&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Beautiful Site&lt;/strong&gt; - Simple and refreshing one page design&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Industry-Leading SEO&lt;/strong&gt; - Help get your website found on search engines and social media&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Media Galleries&lt;/strong&gt; - Display your images and videos with captions in a customizable gallery&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Mobile Friendly&lt;/strong&gt; - Look amazing on every screen with a mobile friendly version of your site&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Multi-language&lt;/strong&gt; - 34+ language packs including English, 中文, and Português&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Multi-user&lt;/strong&gt; - Each author gets their own profile page&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Privacy Pack&lt;/strong&gt; - Assists with GDPR&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Stand Out&lt;/strong&gt; - Bring your site to life with animation, parallax backgrounds, and scroll effects&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;One-Click Deployment&lt;/strong&gt; - No servers. No databases. Only files.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;themes&#34;&gt;Themes&lt;/h2&gt;
-&lt;p&gt;Wowchemy and its templates come with &lt;strong&gt;automatic day (light) and night (dark) mode&lt;/strong&gt; built-in. Alternatively, visitors can choose their preferred mode - click the moon icon in the top right of the &lt;a href=&#34;https://academic-demo.netlify.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Demo&lt;/a&gt; to see it in action! Day/night mode can also be disabled by the site admin in &lt;code&gt;params.toml&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://wowchemy.com/docs/customization&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Choose a stunning &lt;strong&gt;theme&lt;/strong&gt; and &lt;strong&gt;font&lt;/strong&gt;&lt;/a&gt; for your site. Themes are fully customizable.&lt;/p&gt;
-&lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
-&lt;p&gt;Copyright 2016-present &lt;a href=&#34;https://georgecushen.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;George Cushen&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Released under the &lt;a href=&#34;https://github.com/wowchemy/wowchemy-hugo-modules/blob/master/LICENSE.md&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;MIT&lt;/a&gt; license.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>Better numerical derivatives for data</title>
-      <link>https://andgoldschmidt.github.io/project/derivative/</link>
+      <link>https://andgoldschmidt.github.io/posts/derivative/</link>
       <pubDate>Wed, 07 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/derivative/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/derivative/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Derivative&lt;/strong&gt; is an open-source project I started in 2019-2020 that turned into a collaboration with Markus Quade (Github, &lt;a href=&#34;https://github.com/Ohjeah&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@Ohjeah&lt;/a&gt;) and Brian de Silva (Github, &lt;a href=&#34;https://github.com/briandesilva&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@briandesilva&lt;/a&gt;). It is a standalone suite of numerical differentiation methods for noisy time series data written in Python.&lt;/p&gt;
 &lt;p&gt;The goal is to provide some common numerical differentiation techniques that showcase improvements that can be made on finite differences when data is noisy. The package binds these common differentiation methods to a single easily implemented differentiation interface to encourage user adaptation.&lt;/p&gt;
 &lt;p&gt;Derivative is a contribution to &lt;a href=&#34;https://github.com/dynamicslab/pysindy/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PySINDy&lt;/a&gt;&lt;/p&gt;
@@ -769,9 +1064,9 @@ ax.set_ylim([-3.5,3.5])
     
     <item>
       <title>Hierarchical clustering with prototypes</title>
-      <link>https://andgoldschmidt.github.io/project/pyprotoclust/</link>
+      <link>https://andgoldschmidt.github.io/posts/pyprotoclust/</link>
       <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/pyprotoclust/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/pyprotoclust/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Pyprotoclust&lt;/strong&gt; is an implementatin of representative hierarchical clustering using minimax linkage. The original algorithm is from &lt;em&gt;Hierarchical Clustering With Prototypes via Minimax Linkage&lt;/em&gt; (&lt;a href=&#34;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4527350/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;DOI: 10.1198/jasa.2011.tm10183&lt;/a&gt;) by J. Bien and R. Tibshirani; Pyprotoclust takes a distance matrix as input. It returns a linkage matrix encoding the hierachical clustering as well as an additional list labelling the prototypes associated with each clustering.&lt;/p&gt;
 &lt;p&gt;I coded up a fun example inspired by the original paper where I apply the algorithm to determine representative pictures for the Olivetti Faces dataset. It can be found &lt;a href=&#34;https://pyprotoclust.readthedocs.io/en/latest/notebooks/Example.html#Olivetti-Faces&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;in the Pyprotoclust documentation&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Figure&lt;/strong&gt;: (Left) A dendrogram of the hierarchical clustering example with a dashed line at the example cut height. (Right) A scatter plot of the example with circles centered at prototypes drawn with radii equal to the top-level linkage heights of each cluster.&lt;/p&gt;
@@ -780,9 +1075,9 @@ ax.set_ylim([-3.5,3.5])
     
     <item>
       <title>Python package development</title>
-      <link>https://andgoldschmidt.github.io/project/poetry/</link>
+      <link>https://andgoldschmidt.github.io/posts/poetry/</link>
       <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/poetry/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/poetry/</guid>
       <description>&lt;p&gt;There are lots of features that go into packaging up Python code for other users. How can we make a project that ships easily to users and takes advantage of our normal development tools? We&amp;rsquo;ll discuss:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Poetry: for easily making and publishing a package&lt;/li&gt;
@@ -987,9 +1282,9 @@ setup(**setup_kwargs)
     
     <item>
       <title>Control basics with CartPole</title>
-      <link>https://andgoldschmidt.github.io/project/cartpole/</link>
+      <link>https://andgoldschmidt.github.io/posts/cartpole/</link>
       <pubDate>Mon, 09 Dec 2019 00:00:00 +0000</pubDate>
-      <guid>https://andgoldschmidt.github.io/project/cartpole/</guid>
+      <guid>https://andgoldschmidt.github.io/posts/cartpole/</guid>
       <description>&lt;p&gt;In this &lt;a href=&#34;https://github.com/andgoldschmidt/cartpole&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;project on Github&lt;/a&gt; I coded up some tutorial concepts in control theory like observability, controllability, and the linear quadratic regulator using the example environment of a linear pendulum fixed to a cart. I also made fun Jupyter notebook movies to visualize the results.&lt;/p&gt;
 &lt;p&gt;Also included under this project are the slides I did for a short class project covering reinforcement learning (RL) for CartPole from the OpenAI lab. It&amp;rsquo;s nice to contextualize model-free RL methods for control within a familiar environment where we have covered the control theory basics.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;TODO: Turn this into a Google Colab&lt;/code&gt; &lt;a href=&#34;https://colab.research.google.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://colab.research.google.com/&lt;/a&gt;
