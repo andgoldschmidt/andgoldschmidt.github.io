@@ -133,6 +133,8 @@
     
     
     
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
 
     
 
@@ -332,7 +334,7 @@
     <meta property="twitter:image" content="https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
   
     
-      <meta property="og:updated_time" content="2022-03-09T00:00:00&#43;00:00" />
+      <meta property="og:updated_time" content="2022-03-16T15:24:00&#43;00:00" />
     
   
 
@@ -874,6 +876,21 @@
           </a>
         </li>
         
+        
+        
+        
+        
+        
+        
+        
+          
+        
+        <li>
+          <a href="/uploads/andygold_cv.pdf"  aria-label="cv">
+            <i class="ai ai-cv big-icon"></i>
+          </a>
+        </li>
+        
       </ul>
 
     </div>
@@ -1192,10 +1209,10 @@
     <div class="container">
 
     
-      <div class="row  ">
+      <div class="row  justify-content-center">
       
         
-          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+          <div class="section-heading col-12 mb-3 text-center">
             <h1 class="mb-0">Contact</h1>
             
           </div>
@@ -1227,8 +1244,8 @@
 <style>
 .contact-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 0.2em 1em;
+    grid-template-columns: end;
+    grid-gap: .2em 2em;
 }
 .contact-form input,
 .contact-form textarea {
@@ -1248,10 +1265,11 @@
 }
 .contact-form label[for="full-name"],
 .contact-form label[for="email-address"] {
-    order: -1;
+    /* order: 0; */
+    grid-column-end: span 2;
 }
 .contact-form input {
-    order: 0;
+    /* order: 0; */
     margin-bottom: 0.6em;
 }
 .contact-form label[for="message"],
@@ -1274,7 +1292,7 @@
     <form class="contact-form" action="https://formspree.io/f/mjvjdwng"  method="post">
         <label for="full-name">Name</label>
         <input type="text" name="name" id="full-name" placeholder="First and Last" required>
-        <label for="email-address">Email Address</label>
+        <label for="email-address">Email</label>
         <input type="email" name="_replyto" id="email-address" placeholder="Your email address" required>
         <label for="message">Message</label>
         <textarea rows="5" name="message" id="message" placeholder="Your message" required></textarea>
@@ -1325,7 +1343,7 @@
 
   
   <div class="d-none">
-    <input id="map-provider" value="google">
+    <input id="map-provider" value="mapbox">
     <input id="map-lat" value="47.653">
     <input id="map-lng" value="-122.311">
     <input id="map-dir" value="3910 15th Ave. NE, Seattle, WA 98195">
@@ -1455,10 +1473,7 @@
     
     
     
-      <script async defer src="https://maps.googleapis.com/maps/api/js?key="></script>
-      
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js" integrity="sha256-7vjlAeb8OaTrCXZkCNun9djzuB2owUsaO72kXaFDBJs=" crossorigin="anonymous"></script>
-      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
     
 
     

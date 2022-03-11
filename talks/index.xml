@@ -5,7 +5,7 @@
     <link>https://andgoldschmidt.github.io/talks/</link>
       <atom:link href="https://andgoldschmidt.github.io/talks/index.xml" rel="self" type="application/rss+xml" />
     <description>Recent &amp; Upcoming Talks</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Andy Goldschmidt</copyright><lastBuildDate>Sun, 26 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Andy Goldschmidt</copyright><lastBuildDate>Wed, 16 Mar 2022 15:24:00 +0000</lastBuildDate>
     <image>
       <url>https://andgoldschmidt.github.io/media/icon_hufbcf978b363d0f47c9794b839e91d566_21519_512x512_fill_lanczos_center_3.png</url>
       <title>Recent &amp; Upcoming Talks</title>
@@ -13,7 +13,15 @@
     </image>
     
     <item>
-      <title>(Talk) Bilinear Dynamic Mode Decomposition for Quantum Control at MMLDT-CSET</title>
+      <title>Invited talk, APS March Meeting</title>
+      <link>https://andgoldschmidt.github.io/talks/2022_03_mm/</link>
+      <pubDate>Wed, 16 Mar 2022 15:24:00 +0000</pubDate>
+      <guid>https://andgoldschmidt.github.io/talks/2022_03_mm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Invited talk, MMLDT-CSET</title>
       <link>https://andgoldschmidt.github.io/talks/2021_09_mmldtcset/</link>
       <pubDate>Sun, 26 Sep 2021 00:00:00 +0000</pubDate>
       <guid>https://andgoldschmidt.github.io/talks/2021_09_mmldtcset/</guid>
@@ -21,7 +29,7 @@
     </item>
     
     <item>
-      <title>(Organizer) Data-Driven Methods for Quantum Dynamics and Control at SIAM CSE</title>
+      <title>Minisymposium organizer, SIAM CSE</title>
       <link>https://andgoldschmidt.github.io/talks/2021_03_siamcse/</link>
       <pubDate>Mon, 01 Mar 2021 12:00:00 +0000</pubDate>
       <guid>https://andgoldschmidt.github.io/talks/2021_03_siamcse/</guid>
