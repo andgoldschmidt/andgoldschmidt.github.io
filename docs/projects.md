@@ -13,7 +13,7 @@ import ResearchProject from './.vitepress/theme/components/ResearchProject.vue'
     Fine tuned quantum control inspired by robotics, offerred by Harmoniqs and written in Julia.
 </ResearchProject>
 
-[**Harmoniqs**](https://www.harmoniqs.co/) is a startup and open-source ecosystem I co-founded because quantum computing scientists and engineers should have easy access to state-of-the-art optimal control and calibration solutions.
+[**Harmoniqs**](https://www.harmoniqs.co/) is a startup and _open-source ecosystem_ that I co-founded because quantum computing scientists and engineers should have easy access to state-of-the-art optimal control and calibration solutions.
 
 ## Research projects
 
