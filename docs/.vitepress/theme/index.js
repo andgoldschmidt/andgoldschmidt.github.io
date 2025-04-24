@@ -2,5 +2,7 @@ import DefaultTheme from 'vitepress/theme'
 import './style.css'
 
 export default {
-  ...DefaultTheme
+  title: 'Andy Goldschmidt',
+  description: 'Personal website of Andy Goldschmidt',
+  base: '/',
 }
