@@ -19,6 +19,8 @@ import ResearchProject from './.vitepress/theme/components/ResearchProject.vue'
 
 My research focuses on novel applications of optimal control for quantum computing, fast automated calibration of control pulses, learning models for quantum devices, and new methods for optimal control of quantum systems.
 
+I have worked across quantum computing modalities at many levels of the quantum computing stack.
+
 <ResearchProject
     title="Crosstalk-Robust Gatesets"
     img="/images/crgs.png">
