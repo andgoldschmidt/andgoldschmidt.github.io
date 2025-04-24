@@ -1,0 +1,134 @@
+/* Text */
+
+.texttt {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--vp-c-bg-soft);
+    padding: 0.1em 0.3em;
+    border-radius: 4px;
+    font-size: 0.95em;
+  }
+
+/* Images */
+
+.small-img {
+    width: 100px;
+    border-radius: 6px;
+  }
+
+/* Profile Card */
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    color: var(--vp-c-text);
+    background-color: var(--vp-c-bg-soft);
+    border-radius: 12px;
+    box-shadow: var(--vp-shadow-2);
+    max-width: 900px;
+    margin: 2rem auto;
+    flex-wrap: wrap;
+  }
+  
+  .profile-img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px; /* or 0 for a perfect square */
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }  
+  
+  .profile-info {
+    flex: 1;
+    min-width: 250px;
+    font-size: 1.1rem;
+  }
+  
+  .profile-links {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--vp-c-border);
+    border-radius: 6px;
+    background-color: var(--vp-c-bg);
+    color: var(--vp-c-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .btn:hover {
+    background-color: var(--vp-c-bg-soft);
+    border-color: vars(--vp-c-brand);
+  }
+  
+  @media (max-width: 700px) {
+    .profile-card {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .profile-links {
+      justify-content: center;
+    }
+  
+    .profile-img {
+      margin-bottom: 1rem;
+    }
+  }
+  
+  /* Research Project Card */
+
+  .project-card {
+    display: flex;
+    align-items: center; /* Key: aligns image with the center of the content */
+    gap: 1.25rem;
+    margin: 2rem 0;
+    background-color: var(--vp-c-bg-soft);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: var(--vp-shadow-1);
+  }
+  
+  .project-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .project-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Key: centers text vertically next to image */
+  }
+  
+  .project-title {
+    font-size: 1.1rem;
+    margin: 0 0 0.25rem;
+    font-weight: 600;
+    color: var(--vp-c-text);
+  }
+  
+  .project-title a {
+    text-decoration: none;
+    color: var(--vp-c-brand);
+  }
+  
+  .project-desc {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--vp-c-text);
+  }
+  
+  
