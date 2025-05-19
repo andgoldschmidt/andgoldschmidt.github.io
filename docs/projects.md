@@ -19,18 +19,24 @@ import ResearchProject from './.vitepress/theme/components/ResearchProject.vue'
 
 My research focuses on novel applications of optimal control for quantum computing, fast automated calibration of control pulses, learning models for quantum devices, and new methods for optimal control of quantum systems.
 
-I have worked across quantum computing modalities at many levels of the quantum computing stack.
+I am currently interested in accelerated computing for quantum control (GPUs, HPC), and bosonic quantum error correction.
 
 <ResearchProject
-    title="Crosstalk-Robust Gatesets"
+    title="Crosstalk-Robust Gate Sets"
     img="/images/crgs.png">
-    Globally suppress crosstalk on a quantum device using orthogonal gate sets.
+    Globally suppress crosstalk on a quantum computer using orthogonal gate sets.
 </ResearchProject>
 
 <ResearchProject
     title="Quantum Iterative Learning Control"
     img="/images/qilc.png">
     Highly-efficient, model-based calibration of quantum optimal control pulses.
+</ResearchProject>
+
+<ResearchProject
+    title="Quantum Trajectory Bundles"
+    img="/images/bundles.jpg">
+    Massively-parallel, derivative-free quantum optimal control.
 </ResearchProject>
 
 <ResearchProject
